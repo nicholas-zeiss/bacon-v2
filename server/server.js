@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 
-const db = require('./dbControllerAlt');
+const db = require('./dbController');
 const getImages = require('./imageFinder');
 
 const app = express();
