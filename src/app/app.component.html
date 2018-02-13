@@ -1,6 +1,26 @@
 
 
-<div>
-	<router-outlet></router-outlet>
+<div id="app">
+	<app-input></app-input>
+
+	<div class="view">
+		<router-outlet></router-outlet>
+	</div>
+
+	<section class="footer">
+		<div>
+			<p>Information courtesy of <a href="http://www.imdb.com" target="_blank">IMDb</a>.</p>
+			<p>Used with permission.</p>
+		</div>
+		<div>
+			<p>Images courtesy of
+				<a href="https://commons.wikimedia.org/wiki/Main_Page" target="_blank">
+					Wikimedia Commons
+				</a>
+				.
+			</p>
+			<p>Click an image for its source.</p>
+		</div>
+	</section>
 </div>
 

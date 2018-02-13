@@ -1,0 +1,88 @@
+
+
+div {
+	align-items: center;
+	color: #353535;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	width: 100%;
+}
+
+
+@keyframes toggle {
+	0% {
+		opacity: 0;
+	} 20% {
+		opacity: 0;
+	} 100% {
+		opacity: 1;
+	}
+}
+
+
+div > a {
+	background-image: url('/assets/bacon-home.jpg');
+	background-position: 50% 10%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	border-radius: 50%;
+	box-shadow: 0 0 100px 30px #ffc800;
+	box-sizing: border-box;
+	height: 40vw;
+	max-height: 500px;
+	max-width: 500px;
+	min-height: 250px;
+	min-width: 250px;
+	opacity: 1;
+	width: 40vw;
+}
+
+
+div > a.toggle {
+	animation: 2.5s toggle;
+}
+
+
+div > h2 {
+	font-size: 30px;
+	margin: 0 1rem 1.5rem;
+	text-align: center;
+	text-shadow: 1px 1px 1px #d6d6d6;
+}
+
+
+div > p {
+	font-size: 20px;
+	margin: 0 1rem 2rem;
+	text-align: center;
+}
+
+
+div > p > a {
+	color: #3f35ff;
+	font-weight: 600;
+}
+
+
+div > button {
+	background-color: #23bc61;
+	border-radius: 3px;
+	border: none;
+	box-shadow: 0 0 6px 1px #666;
+	color: #f8f8f8;
+	cursor: pointer;
+	font-size: 1.5rem;
+	margin: 0;
+	outline: none;
+	padding: .2rem .5rem;
+	text-shadow: 1px 1px 1px #136b36;
+}
+
+
+div > button:hover {
+	background-color: #1b914a;
+}
+
+
