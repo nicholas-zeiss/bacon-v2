@@ -218,7 +218,7 @@ exports.getActorsByNconsts = (nconsts) => (
 );
 
 
-exports.getBaconPath = (actor) => (
+exports.getBaconPath = actor => (
 	connectToDb((db, resolve, reject) => {
 		const nconsts = [];
 		const tconsts = [];

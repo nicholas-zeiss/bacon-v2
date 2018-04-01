@@ -11,7 +11,7 @@ import { DisplayComponent } from './display.component';
 		CommonModule,
 		DisplayRoutingModule
 	],
-	declarations: [DisplayComponent]
+	declarations: [ DisplayComponent ]
 })
 export class DisplayModule { }
 

@@ -2,9 +2,9 @@
 
 <header>
 	<h1>Six Degrees of Kevin Bacon</h1>
-	<form id="name-input">
-		<input placeholder="Search for an actor" type="text"/>
-		<input type="submit" value=""/>
+	<form (ngSubmit)="searchActor()" id="name-input">
+		<input [formControl]="searchForm" placeholder="Search for an actor" type="text"/>
+		<input [disabled]="disabled" type="submit" value=""/>
 	</form>
 </header>
 

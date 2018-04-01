@@ -8,8 +8,9 @@ import { SearchError } from '../shared/search-error';
 
 @Injectable()
 export class StateService {
-	currBaconPath: BaconPath;
-	searchError: SearchError;
+	storedBaconPaths: BaconPath[] = [];
+	currBaconPath: BaconPath = null;
+	searchError: SearchError = null;
 
 
 	constructor() { }

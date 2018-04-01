@@ -1,6 +1,6 @@
 
 
-div {
+section {
 	align-items: center;
 	color: #353535;
 	display: flex;
@@ -22,7 +22,7 @@ div {
 }
 
 
-div > a {
+section > a {
 	background-image: url('/assets/bacon-home.jpg');
 	background-position: 50% 10%;
 	background-repeat: no-repeat;
@@ -40,12 +40,12 @@ div > a {
 }
 
 
-div > a.toggle {
+section > a.toggle {
 	animation: 2.5s toggle;
 }
 
 
-div > h2 {
+section > h2 {
 	font-size: 30px;
 	margin: 0 1rem 1.5rem;
 	text-align: center;
@@ -53,20 +53,20 @@ div > h2 {
 }
 
 
-div > p {
+section > p {
 	font-size: 20px;
 	margin: 0 1rem 2rem;
 	text-align: center;
 }
 
 
-div > p > a {
+section > p > a {
 	color: #3f35ff;
 	font-weight: 600;
 }
 
 
-div > button {
+section > button {
 	background-color: #23bc61;
 	border-radius: 3px;
 	border: none;
@@ -81,7 +81,7 @@ div > button {
 }
 
 
-div > button:hover {
+section > button:hover {
 	background-color: #1b914a;
 }
 

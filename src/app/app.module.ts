@@ -1,6 +1,7 @@
 
 
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,7 +22,9 @@ import { LoadingComponent } from './loading/loading.component';
 	imports: [
 		AppRoutingModule,
 		BrowserModule,
-		CoreModule
+		CoreModule,
+		FormsModule,
+		ReactiveFormsModule
 	],
 	bootstrap: [AppComponent]
 })

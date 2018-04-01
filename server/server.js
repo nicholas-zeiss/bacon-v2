@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 
-const db = require('./dbController');
+const db = require('./dbControllerAlt');
 const getImages = require('./imageFinder');
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, '../../app')));
 
 
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../../app/index.html'));
+	res.sendFile(path.join(__dirname, '../src/index.html'));
 });
 
 
