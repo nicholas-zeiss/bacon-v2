@@ -1,6 +1,6 @@
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 
 @Component({
@@ -8,12 +8,7 @@ import { Component, OnInit } from '@angular/core';
 	templateUrl: './loading.component.html',
 	styleUrls: ['./loading.component.css']
 })
-export class LoadingComponent implements OnInit {
-
-	constructor() { }
-
-	ngOnInit() {
-	}
-
+export class LoadingComponent {
+	@Input() searchName: string;
 }
 

@@ -149,7 +149,13 @@ function generatePath(actor, parents, movies) {
 	const pathToBacon = [];
 
 	actor.parents.forEach(([ nconst, tconst ]) => {
-		currActor.movie = movies[tconst];
+		const movie = movies[tconst];
+
+		delete currActor._id;
+		delete currActor.parents;
+		delete movie._id;
+
+		currActor.movie = movie;
 		pathToBacon.push(currActor);
 		currActor = { actor: parents[nconst] };
 	});

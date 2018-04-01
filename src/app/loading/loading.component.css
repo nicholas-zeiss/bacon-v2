@@ -1,0 +1,59 @@
+
+
+section {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	flex: 1 0 auto;
+	justify-content: center;
+	width: 100%;
+}
+
+
+h1 {
+	color: #353535;
+	font-size: 30px;
+	margin: 0 1rem;
+	text-align: center;
+	text-shadow: 1px 1px 1px #d6d6d6;
+}
+
+
+@keyframes spin {
+	   0%  { transform: rotate(0deg); }
+	 8.3%  { transform: rotate(30deg); }
+	16.7%  { transform: rotate(60deg); }
+	  25%  { transform: rotate(90deg); }
+	33.3%  { transform: rotate(120deg); }
+	41.7%  { transform: rotate(150deg); }
+	  50%  { transform: rotate(180deg); }
+	58.3%  { transform: rotate(210deg); }
+	66.7%  { transform: rotate(240deg); }
+	  75%  { transform: rotate(270deg); }
+	83.3%  { transform: rotate(300deg); }
+	91.7%  { transform: rotate(330deg); }
+	 100%  { transform: rotate(360deg); }
+}
+
+
+div {
+	animation: spin 1s steps(1) infinite;
+	background-color: transparent;
+	border-radius: 5px;
+	height: 10px;
+	margin: 100px;
+	width: 10px;
+	box-shadow:  0px -30px rgba(76, 78, 81, .083),
+							15px -26px rgba(76, 78, 81, .167),
+							26px -15px rgba(76, 78, 81, .25),
+							30px   0px rgba(76, 78, 81, .333),
+							26px  15px rgba(76, 78, 81, .417),
+							15px  26px rgba(76, 78, 81, .5),
+							 0px  30px rgba(76, 78, 81, .583),
+						 -15px  26px rgba(76, 78, 81, .667),
+						 -26px  15px rgba(76, 78, 81, .75),
+						 -30px   0px rgba(76, 78, 81, .833),
+						 -26px -15px rgba(76, 78, 81, .917),
+						 -15px -26px 0 1px rgba(76, 78, 81, 1);
+}
+
