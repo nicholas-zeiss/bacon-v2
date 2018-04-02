@@ -1,19 +1,22 @@
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
+import { StateService } from '../core/state.service';
+import { Actor } from './shared/actor';
 
 @Component({
 	selector: 'app-choice',
 	templateUrl: './choice.component.html',
 	styleUrls: ['./choice.component.css']
 })
-export class ChoiceComponent implements OnInit {
+export class ChoiceComponent {
+	choices: Actor[];
 
-	constructor() { }
-
-	ngOnInit() {
+	constructor(private state: StateService) {
+		this.choices = state.currChoices.reduce((arr, actor) => (
+			arr.concat({ name: actor.name, dob: actor.birthDeath })
+		), []);
 	}
-
 }
 

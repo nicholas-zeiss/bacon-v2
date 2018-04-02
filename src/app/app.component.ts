@@ -2,8 +2,10 @@
 
 import { Component } from '@angular/core';
 
-import { ServerCallsService } from './core/server-calls.service';
 import { BaconPath } from './shared/bacon-path';
+import { PathingService } from './core/pathing.service';
+import { ServerCallsService } from './core/server-calls.service';
+import { StateService } from './core/state.service';
 
 
 @Component({
@@ -12,25 +14,22 @@ import { BaconPath } from './shared/bacon-path';
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-	inputDisabled = false;
 
-	constructor(private serverCalls: ServerCallsService) { }
+	constructor(
+		private pathing: PathingService,
+		private serverCalls: ServerCallsService,
+		private state: StateService
+	) { }
 
 	search(actor: string) {
-		this.inputDisabled = true;
+		this.state.disableInput();
+		this.state.currID = actor;
+		this.state.searchError = null;
+		this.pathing.pathToLoading();
 
 		this.serverCalls
 			.getPathByName(actor)
-			.subscribe(
-				baconPath => {
-					this.inputDisabled = false;
-					console.log(baconPath);
-				},
-				error => {
-					this.inputDisabled = false;
-					console.log(error);
-				}
-			);
+			.subscribe(this.state.displayBaconPath, this.state.handleError);
 	}
 }
 

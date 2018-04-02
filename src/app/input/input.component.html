@@ -4,7 +4,7 @@
 	<h1>Six Degrees of Kevin Bacon</h1>
 	<form (ngSubmit)="searchActor()" id="name-input">
 		<input [formControl]="searchForm" placeholder="Search for an actor" type="text"/>
-		<input [disabled]="disabled" type="submit" value=""/>
+		<input [disabled]="inputDisabled" type="submit" value=""/>
 	</form>
 </header>
 

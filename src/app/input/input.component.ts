@@ -1,7 +1,12 @@
 
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+
+import { Observer } from 'rxjs/Observer';
+import { Subscription } from 'rxjs/Subscription';
+
+import { StateService } from '../core/state.service';
 
 
 @Component({
@@ -9,22 +14,35 @@ import { FormControl, Validators } from '@angular/forms';
 	templateUrl: './input.component.html',
 	styleUrls: ['./input.component.css']
 })
-export class InputComponent implements OnChanges {
+export class InputComponent implements OnDestroy {
 
+	inputDisabled: boolean;
+	inputDisabledListener: Subscription;
 	searchForm = new FormControl('', Validators.required);
-	@Input() disabled: boolean;
 	@Output() search = new EventEmitter<String>();
 
-	ngOnChanges(changes) {
-		if (!changes.disabled.currentValue && changes.disabled.previousValue) {
-			this.searchForm.enable();
-		}
+	constructor(private state: StateService) {
+		const updateInput = disabled => {
+			this.inputDisabled = disabled;
+			disabled ? this.searchForm.disable() : this.searchForm.enable();
+		};
+
+		this.inputDisabledListener = state.listenToInput({
+			next: updateInput,
+			error: updateInput.bind(null, true),
+			complete: updateInput.bind(null, false)
+		});
+
+		this.inputDisabled = state.inputDisabled;
+	}
+
+	ngOnDestroy() {
+		this.inputDisabledListener.unsubscribe();
 	}
 
 	searchActor() {
 		this.search.emit(this.searchForm.value);
 		this.searchForm.reset();
-		this.searchForm.disable();
 	}
 }
 

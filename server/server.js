@@ -28,7 +28,7 @@ app.get('*', (req, res) => {
 function sendBaconPath(actor, res) {
 	db.getBaconPath(actor)
 		.then((path) => {
-			if (path.some((node) => node.actor.imgUrl === null)) {
+			if (path.some(node => node.actor.imgUrl === null)) {
 				addImages(path, res);
 			} else {
 				res.status(200).json(path);
@@ -75,13 +75,18 @@ app.post('/api/name', (req, res) => {
 
 	db.getActorsByName(req.body.name)
 		.then((actors) => {
-			if (!actors.length) {
-				res.sendStatus(404);
-			} else if (actors.length === 1) {
-				sendBaconPath(actors[0], res);
-			} else {
-				res.status(300).json(actors);
-			}
+			setTimeout(() => {
+				if (!actors.length) {
+					res.sendStatus(404);
+				} else if (actors.length === 1) {
+					sendBaconPath(actors[0], res);
+				} else {
+					res.status(300).json(actors.map((actor) => {
+						delete actor.parents;
+						return actor;
+					}));
+				}
+			}, 1000);
 		})
 		.catch(() => res.sendStatus(500));
 });

@@ -1,6 +1,8 @@
 
 
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { StateService } from '../core/state.service';
 
 
 @Component({
@@ -9,7 +11,10 @@ import { Component, Input } from '@angular/core';
 	styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent {
+	private searchTerm = '';
 
-
+	constructor(private state: StateService) {
+		this.searchTerm = typeof state.currID === 'number' ? `index: ${state.currID}` : state.currID;
+	}
 }
 

@@ -151,7 +151,6 @@ function generatePath(actor, parents, movies) {
 	actor.parents.forEach(([ nconst, tconst ]) => {
 		const movie = movies[tconst];
 
-		delete currActor._id;
 		delete currActor.parents;
 		delete movie._id;
 

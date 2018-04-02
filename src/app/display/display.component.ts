@@ -1,6 +1,8 @@
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { StateService } from '../core/state.service';
 
 
 @Component({
@@ -8,12 +10,15 @@ import { Component, OnInit } from '@angular/core';
 	templateUrl: './display.component.html',
 	styleUrls: ['./display.component.css']
 })
-export class DisplayComponent implements OnInit {
+export class DisplayComponent {
 
-	constructor() { }
+	path: any[];
 
-	ngOnInit() {
+	constructor(private state: StateService) {
+		this.path = state.currBaconPath.reduce((arr, {actor, movie}) => {
+			movie = movie ? { title: movie.title, year: movie.year } : null;
+			return arr.concat({ name: actor.name, dob: actor.birthDeath }, movie);
+		}, []);
 	}
-
 }
 
