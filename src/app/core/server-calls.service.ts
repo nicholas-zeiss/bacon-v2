@@ -21,8 +21,8 @@ export class ServerCallsService {
 	}
 
 
-	getPathByNconst(nconst: string): Observable<BaconPath | HttpErrorResponse> {
-		return this.http.post<any>('/api/nconst', { nconst });
+	getPathByNconst(nconst: number): Observable<BaconPath | HttpErrorResponse> {
+		return this.http.post<any>(`/api/${nconst}`, { nconst });
 	}
 }
 

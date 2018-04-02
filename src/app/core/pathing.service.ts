@@ -10,47 +10,24 @@ export class PathingService {
 
 	constructor(private location: Location, private router: Router) { }
 
-	pathToChoose(name: string): void {
-		const prevPath = this.router.url;
-		const path = `/choose/${name.replace(/\s/g, '-')}`;
 
-		this.router
-			.navigateByUrl(path)
-			.then(() => {
-				if (prevPath === '/loading') {
-					this.location.replaceState(path);
-				}
-			});
+	pathToChoose(name: string): void {
+		this.router.navigateByUrl(`/choose/${name.replace(/\s/g, '-')}`);
 	}
 
 
 	pathToDisplay(id: number): void {
-		const prevPath = this.router.url;
-		const path = `/display/${id}`;
-		console.log('pathing to display', id);
-		this.router
-			.navigateByUrl(path)
-			.then(() => {
-				if (prevPath === '/loading') {
-					this.location.replaceState(path);
-				}
-			});
+		this.router.navigateByUrl(`/display/${id}`);
 	}
+
 
 	pathToHome() {
 		this.router.navigateByUrl('/home');
 	}
 
-	pathToLoading(): void {
-		const prevPath = this.router.url;
 
-		this.router
-			.navigateByUrl('/loading')
-			.then(() => {
-				if (/^\/choose/.test(prevPath)) {
-					this.location.replaceState('/loading');
-				}
-			});
+	pathToLoading(): void {
+		this.router.navigateByUrl('/loading', { skipLocationChange: true });
 	}
 }
 

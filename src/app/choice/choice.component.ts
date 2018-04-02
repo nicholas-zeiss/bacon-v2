@@ -3,7 +3,7 @@
 import { Component } from '@angular/core';
 
 import { StateService } from '../core/state.service';
-import { Actor } from './shared/actor';
+import { Actor } from '../shared/actor';
 
 @Component({
 	selector: 'app-choice',

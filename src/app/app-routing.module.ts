@@ -1,8 +1,10 @@
 
 
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+import { ChooseGuard } from './core/choose.guard';
+import { DisplayGuard } from './core/display.guard';
 import { HomeComponent } from './home/home.component';
 import { LoadingComponent } from './loading/loading.component';
 
@@ -10,11 +12,13 @@ import { LoadingComponent } from './loading/loading.component';
 const routes: Routes = [
 	{
 		path: 'choose/:name',
-		loadChildren: 'app/choice/choice.module#ChoiceModule'
+		loadChildren: 'app/choice/choice.module#ChoiceModule',
+		canActivate: [ChooseGuard]
 	},
 	{
 		path: 'display/:nconst',
-		loadChildren: 'app/display/display.module#DisplayModule'
+		loadChildren: 'app/display/display.module#DisplayModule',
+		canActivate: [DisplayGuard]
 	},
 	{
 		path: 'home',
@@ -32,7 +36,12 @@ const routes: Routes = [
 
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
+	imports: [
+		RouterModule.forRoot(
+			routes,
+			{ preloadingStrategy: PreloadAllModules }
+		)
+	],
 	exports: [RouterModule]
 })
 export class AppRoutingModule { }
