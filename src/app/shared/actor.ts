@@ -9,3 +9,14 @@ export interface Actor {
 	name: string;
 }
 
+
+export interface ActorChoice {
+	name: string;
+	actors: Actor[];
+}
+
+
+export const copyActorChoice = (choice: ActorChoice) => ({
+	actors: choice.actors.map((actor: Actor) => Object.assign({}, actor)),
+	name: choice.name
+});

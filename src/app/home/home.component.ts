@@ -11,6 +11,10 @@ import { StateService } from '../core/state.service';
 	styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-	constructor(private state: StateService) { }
+	searchError: number;
+
+	constructor(private state: StateService) {
+		state.searchError.subscribe(val => this.searchError = val);
+	}
 }
 

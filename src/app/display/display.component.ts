@@ -11,13 +11,15 @@ import { StateService } from '../core/state.service';
 	styleUrls: ['./display.component.css']
 })
 export class DisplayComponent {
-	path: any[];
+	path: any[] = null;
 
 	constructor(private state: StateService) {
-		this.path = state.currPath.reduce((arr, {actor, movie}) => {
-			movie = movie ? { title: movie.title, year: movie.year } : null;
-			return arr.concat({ name: actor.name, dob: actor.birthDeath }, movie);
-		}, []);
+		state.path.subscribe(path => {
+			this.path = path.nodes.reduce((arr, {actor, movie}) => {
+				movie = movie ? movie.title + ' - ' + movie.year : '';
+				return arr.concat([actor.name + ' - ' + actor.birthDeath, movie]);
+			}, []);
+		});
 	}
 }
 

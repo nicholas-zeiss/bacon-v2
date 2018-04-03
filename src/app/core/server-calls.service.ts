@@ -3,11 +3,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
-import { catchError } from 'rxjs/operators';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 
-import { BaconPath } from '../shared/bacon-path';
+import { BaconPath, BaconPathNode } from '../shared/bacon-path';
 
 
 @Injectable()
@@ -15,14 +14,17 @@ export class ServerCallsService {
 
 	constructor(private http: HttpClient) { }
 
+	getPath(term: string | name): Observable<BaconPath | HttpErrorResponse> {
+		const [ url, body ] = typeof term === 'string' ?
+			['/api/name', { name: term }] :
+			['/api/nconst', { nconst: term }];
 
-	getPathByName(name: string): Observable<BaconPath | HttpErrorResponse> {
-		return this.http.post<any>('/api/name', { name });
-	}
-
-
-	getPathByNconst(nconst: number): Observable<BaconPath | HttpErrorResponse> {
-		return this.http.post<any>(`/api/${nconst}`, { nconst });
+		return (this.http.post<any>(url, body))
+			.pipe(
+				map((path: BaconPathNode[]) => (
+					{ nconst: path[0]._id, nodes: path }
+				))
+			);
 	}
 }
 

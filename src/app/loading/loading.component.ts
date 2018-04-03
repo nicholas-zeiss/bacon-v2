@@ -11,10 +11,12 @@ import { StateService } from '../core/state.service';
 	styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent {
-	private searchTerm = '';
+	private searchTerm: string;
 
 	constructor(private state: StateService) {
-		this.searchTerm = typeof state.currID === 'number' ? `index: ${state.currID}` : state.currID;
+		state.searchTerm.subscribe(val => (
+			this.searchTerm = typeof val === 'number' ? `index: ${val}` : val
+		));
 	}
 }
 

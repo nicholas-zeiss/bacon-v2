@@ -3,34 +3,27 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-import { ChooseGuard } from './core/choose.guard';
-import { DisplayGuard } from './core/display.guard';
 import { HomeComponent } from './home/home.component';
 import { LoadingComponent } from './loading/loading.component';
 
 
 const routes: Routes = [
 	{
-		path: 'choose/:name',
-		loadChildren: 'app/choice/choice.module#ChoiceModule',
-		canActivate: [ChooseGuard]
-	},
-	{
-		path: 'display/:nconst',
-		loadChildren: 'app/display/display.module#DisplayModule',
-		canActivate: [DisplayGuard]
-	},
-	{
-		path: 'home',
+		path: '',
+		pathMatch: 'full',
 		component: HomeComponent
 	},
 	{
-		path: 'loading',
-		component: LoadingComponent
+		path: 'choose/:name',
+		loadChildren: 'app/choice/choice.module#ChoiceModule'
+	},
+	{
+		path: 'display/:nconst',
+		loadChildren: 'app/display/display.module#DisplayModule'
 	},
 	{
 		path: '**',
-		redirectTo: '/home'
+		redirectTo: ''
 	}
 ];
 

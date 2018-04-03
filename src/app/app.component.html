@@ -4,7 +4,8 @@
 	<app-input></app-input>
 
 	<div class="view">
-		<router-outlet></router-outlet>
+		<app-loading *ngIf="loading; else outlet"></app-loading>
+		<ng-template #outlet><router-outlet></router-outlet></ng-template>
 	</div>
 
 	<section class="footer">

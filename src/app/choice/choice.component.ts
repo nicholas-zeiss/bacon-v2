@@ -3,7 +3,7 @@
 import { Component } from '@angular/core';
 
 import { StateService } from '../core/state.service';
-import { Actor } from '../shared/actor';
+import { ActorChoice } from '../shared/actor';
 
 @Component({
 	selector: 'app-choice',
@@ -11,12 +11,14 @@ import { Actor } from '../shared/actor';
 	styleUrls: ['./choice.component.css']
 })
 export class ChoiceComponent {
-	choices: Actor[];
+	choice: any;
 
 	constructor(private state: StateService) {
-		this.choices = state.currChoices.reduce((arr, actor) => (
-			arr.concat({ name: actor.name, dob: actor.birthDeath })
-		), []);
+		state.choice.subscribe(val => {
+			this.choice = val.actors.reduce((arr, actor) => (
+				arr.concat(actor.name + ' ' + actor.birthDeath)
+			), []);
+		});
 	}
 }
 

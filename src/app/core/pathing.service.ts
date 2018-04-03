@@ -16,18 +16,13 @@ export class PathingService {
 	}
 
 
-	pathToDisplay(id: number): void {
-		this.router.navigateByUrl(`/display/${id}`);
+	pathToDisplay(nconst: number): void {
+		this.router.navigateByUrl(`/display/${nconst}`);
 	}
 
 
 	pathToHome() {
 		this.router.navigateByUrl('/home');
-	}
-
-
-	pathToLoading(): void {
-		this.router.navigateByUrl('/loading', { skipLocationChange: true });
 	}
 }
 

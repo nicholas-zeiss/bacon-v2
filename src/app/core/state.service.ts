@@ -5,98 +5,86 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { Observer } from 'rxjs/Observer';
 import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { PathingService } from './pathing.service';
 import { ServerCallsService } from './server-calls.service';
-import { Actor } from '../shared/actor';
-import { BaconPath } from '../shared/bacon-path';
+import { ActorChoice, copyActorChoice } from '../shared/actor';
+import { BaconPath, BaconPathNode, copyBaconPath } from '../shared/bacon-path';
+
+
+const INIT_STATE = {
+	choice: { init: null, copy: copyActorChoice },
+	inputDisabled: { init: false },
+	loading: { init: false },
+	path: { init: null, copy: copyBaconPath },
+	searchError: { init: null },
+	searchTerm: { init: null }
+};
+
+const addProperty = (obj, key, { init, copy = a => a }) => {
+	const subj = new BehaviorSubject(init);
+	subj.subscribe(val => obj['_' + key] = val);
+
+	Object.defineProperty(obj, key, {
+		get() { return subj; },
+		set(val) { subj.next(copy(val)); }
+	});
+};
 
 
 @Injectable()
 export class StateService {
-	currPath: BaconPath = null;
-	currID: string | number = null;
-	currChoices: Actor[] = null;
-	searchError: number = null;
-	storedPaths: { [index: string]: BaconPath } = {};
-	private _inputDisabled = false;
-	private _inputSubject: Subject<boolean> = new Subject();
+	private storedChoices: { [index: string]: BaconPath } = {};
+	private storedPaths: { [index: string]: BaconPath } = {};
 
 	constructor (
 		private pathing: PathingService,
-		private serverCalls: ServerCallsService
-	) { }
-
-
-	get inputDisabled() {
-		return this._inputDisabled;
-	}
-
-
-	listenToInput(observer: Observer<boolean>): Subscription {
-		return this._inputSubject.subscribe(observer);
-	}
-
-
-	disableInput = (): void => {
-		if (!this._inputDisabled) {
-			this._inputDisabled = true;
-			this._inputSubject.next(true);
+		private server: ServerCallsService
+	) {
+		for (const key in INIT_STATE) {
+			addProperty(this, key, INIT_STATE[key]);
 		}
 	}
-
-
-	enableInput = (): void => {
-		if (this._inputDisabled) {
-			this._inputDisabled = false;
-			this._inputSubject.next(false);
-		}
-	}
-
 
 	search(term: number | string): void {
-		this.currID = term;
 		this.searchError = null;
-		this.disableInput();
-		this.pathing.pathToLoading();
+		this.searchTerm = term;
+		this.inputDisabled = true;
+		this.loading = true;
 
-		let call;
-
-		if (typeof term === 'number') {
-			call = this.serverCalls.getPathByNconst(term);
-		} else {
-			call = this.serverCalls.getPathByName(term);
-		}
-
-		call.subscribe(this.handleSuccess, this.handleError);
+		this.server
+			.getPath(term)
+			.subscribe(this.handleSuccess, this.handleError);
 	}
 
 
 	handleSuccess = (path: BaconPath): void => {
-		const nconst = path[0].actor._id;
+		this.inputDisabled = false;
+		this.loading = false;
+		this.path = path;
+		this.searchTerm = null;
+		this.storedPaths[path.nconst] = path;
 
-		this.storedPaths[nconst] = path;
-		this.currID = nconst;
-		this.displayBaconPath();
+		this.pathing.pathToDisplay(path.nconst);
 	}
 
 
 	handleError = (err: HttpErrorResponse): void => {
+		this.loading = false;
+
 		if (err.status === 300) {
-			this.currChoices = err.error;
-			this.pathing.pathToChoose(err.error[0].name);
+			const choice = { actors: err.error, name: err.error[0].name };
+			console.log(choice)
+			this.choice = choice;
+			this.storedChoices[choice.name] = choice;
+			this.pathing.pathToChoose(choice.name);
+
 		} else {
+			this.inputDisabled = false;
 			this.searchError = err.status;
-			this.enableInput();
 			this.pathing.pathToHome();
 		}
-	}
-
-
-	displayBaconPath = (): void => {
-		this.currPath = this.storedPaths[this.currID];
-		this.pathing.pathToDisplay(<number>this.currID);
 	}
 }
 
