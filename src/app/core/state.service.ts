@@ -1,16 +1,15 @@
 
 
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observer } from 'rxjs/Observer';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { PathingService } from './pathing.service';
 import { ServerCallsService } from './server-calls.service';
-import { ActorChoice, copyActorChoice } from '../shared/actor';
-import { BaconPath, BaconPathNode, copyBaconPath } from '../shared/bacon-path';
+import { ActorChoice, copyActorChoice, isActorChoice } from '../shared/actor';
+import { BaconPath, copyBaconPath } from '../shared/bacon-path';
+import { SearchError } from '../shared/search-error';
 
 
 const INIT_STATE = {
@@ -34,8 +33,14 @@ const addProperty = (obj, key, { init, copy = a => a }) => {
 
 @Injectable()
 export class StateService {
-	private storedChoices: { [index: string]: BaconPath } = {};
-	private storedPaths: { [index: string]: BaconPath } = {};
+	private storedChoices: { [index: string]: ActorChoice } = {};
+	private storedPaths: { [index: number]: BaconPath } = {};
+	choice: BehaviorSubject<ActorChoice>;
+	inputDisabled: BehaviorSubject<boolean>;
+	loading: BehaviorSubject<boolean>;
+	path: BehaviorSubject<BaconPath>;
+	searchError: BehaviorSubject<SearchError>;
+	searchTerm: BehaviorSubject<number | string>;
 
 	constructor (
 		private pathing: PathingService,
@@ -60,7 +65,7 @@ export class StateService {
 		return false;
 	}
 
-	search(term: number | string): void {
+	search(term: number | string) {
 		this.searchError = null;
 		this.searchTerm = term;
 		this.inputDisabled = true;
@@ -72,32 +77,37 @@ export class StateService {
 	}
 
 
-	handleSuccess = (path: BaconPath): void => {
+	handleSuccess = (payload: ActorChoice | BaconPath) => {
 		this.inputDisabled = false;
 		this.loading = false;
-		this.path = path;
 		this.searchTerm = null;
-		this.storedPaths[path.nconst] = path;
 
-		this.pathing.pathToDisplay(path.nconst);
+		if (isActorChoice(payload)) {
+			this.choice = payload;
+			this.storedChoices[payload.name] = payload;
+			this.pathing.pathToChoose(payload.name);
+		} else {
+			this.path = payload;
+			this.storedPaths[payload.nconst] = payload;
+			this.pathing.pathToDisplay(payload.nconst);
+		}
 	}
 
 
-	handleError = (err: HttpErrorResponse): void => {
+	handleError = (err: SearchError) => {
+		this.inputDisabled = false;
 		this.loading = false;
+		this.searchError = err;
+		this.pathing.pathToHome();
+	}
 
-		if (err.status === 300) {
-			const choice = { actors: err.error, name: err.error[0].name };
 
-			this.choice = choice;
-			this.storedChoices[choice.name] = choice;
-			this.pathing.pathToChoose(choice.name);
-
-		} else {
-			this.inputDisabled = false;
-			this.searchError = err.status;
-			this.pathing.pathToHome();
-		}
+	reset = () => {
+		this.inputDisabled = false;
+		this.loading = false;
+		this.searchError = null;
+		this.searchTerm = null;
+		this.pathing.pathToHome();
 	}
 }
 

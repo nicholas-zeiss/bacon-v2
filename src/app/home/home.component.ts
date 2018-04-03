@@ -1,8 +1,11 @@
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { StateService } from '../core/state.service';
+import { SearchError } from '../shared/search-error';
 
 
 @Component({
@@ -10,11 +13,17 @@ import { StateService } from '../core/state.service';
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-	searchError: number;
+export class HomeComponent implements OnDestroy {
+	error: SearchError;
+	subscription: Subscription;
 
 	constructor(private state: StateService) {
-		state.searchError.subscribe(val => this.searchError = val);
+		this.subscription = state.searchError
+			.subscribe(err => this.error = err);
+	}
+
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
 	}
 }
 
