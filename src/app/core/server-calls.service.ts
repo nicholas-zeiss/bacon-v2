@@ -22,7 +22,7 @@ export class ServerCallsService {
 		return (this.http.post<any>(url, body))
 			.pipe(
 				map((path: BaconPathNode[]) => (
-					{ nconst: path[0]._id, nodes: path }
+					{ nconst: path[0].actor._id, nodes: path }
 				))
 			);
 	}

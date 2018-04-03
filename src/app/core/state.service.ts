@@ -24,7 +24,6 @@ const INIT_STATE = {
 
 const addProperty = (obj, key, { init, copy = a => a }) => {
 	const subj = new BehaviorSubject(init);
-	subj.subscribe(val => obj['_' + key] = val);
 
 	Object.defineProperty(obj, key, {
 		get() { return subj; },
@@ -45,6 +44,20 @@ export class StateService {
 		for (const key in INIT_STATE) {
 			addProperty(this, key, INIT_STATE[key]);
 		}
+	}
+
+	loadStored(term: string | number): boolean {
+		if (this.storedChoices[term] || this.storedPaths[term]) {
+			if (typeof term === 'string') {
+				this.choice = this.storedChoices[term];
+			} else {
+				this.path = this.storedPaths[term];
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	search(term: number | string): void {
@@ -75,7 +88,7 @@ export class StateService {
 
 		if (err.status === 300) {
 			const choice = { actors: err.error, name: err.error[0].name };
-			console.log(choice)
+
 			this.choice = choice;
 			this.storedChoices[choice.name] = choice;
 			this.pathing.pathToChoose(choice.name);
