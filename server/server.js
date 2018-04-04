@@ -102,11 +102,13 @@ app.post('/api/nconst', (req, res) => {
 
 	db.getActorsByNconsts([req.body.nconst])
 		.then((actors) => {
-			if (!actors.length) {
-				res.sendStatus(404);
-			} else {
-				sendBaconPath(actors[0], res);
-			}
+			setTimeout(() => {
+				if (!actors.length) {
+					res.sendStatus(404);
+				} else {
+					sendBaconPath(actors[0], res);
+				}
+			}, 1000);
 		})
 		.catch(() => res.sendStatus(500));
 });

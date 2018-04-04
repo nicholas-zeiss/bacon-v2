@@ -1,5 +1,9 @@
 
 
+import { ActorChoice, ActorID } from './actor';
+import { AppStateProperty } from './app-state';
+
+
 export class SearchError {
 	message: string;
 	name?: string;
@@ -22,5 +26,10 @@ export class SearchError {
 			this.message = `Internal Server Error: ${errCode}`;
 		}
 	}
+}
+
+
+export function isSearchError(err: AppStateProperty): err is SearchError {
+	return typeof (<SearchError>err).message === 'string';
 }
 

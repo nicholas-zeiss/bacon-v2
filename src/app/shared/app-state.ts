@@ -32,17 +32,32 @@ export interface AppStateUpdate {
 }
 
 
+export type AppStateProperty = boolean | number | string | ActorChoice | ActorChoice[] | BaconPath | BaconPath[] | SearchError;
+
+
 export const INITIAL_STATE = {
 	choice: null,
-	// choice: {name: 'Tom Holland'},
 	inputDisabled: false,
 	loading: false,
 	path: null,
 	searchError: null,
 	searchTerm: null,
 	storedChoices: [],
-	// storedChoices: [{name: 'Tom Holland'}],
-	// storedChoices: [{name:'Tom Holland'},{name:'foo3'},{name:'foo1'},{name:'foo2'}],
 	storedPaths: []
+};
+
+
+export type Action = (prev: AppState, next?: AppStateUpdate) => AppState;
+
+
+export interface AppStore {
+	actions: Subject<Action>;
+	states: BehaviorSubject<AppState>;
+}
+
+
+export const STORE: AppStore = {
+	actions: new Subject(),
+	states: new BehaviorSubject(INITIAL_STATE)
 };
 

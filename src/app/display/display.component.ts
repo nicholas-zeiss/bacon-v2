@@ -16,24 +16,25 @@ import { BaconPath } from '../shared/bacon-path';
 })
 export class DisplayComponent implements OnDestroy {
 	path: BaconPath;
-	pathStr: string[];
+	pathStr: any[];
 	subscription: Subscription;
 
 	constructor(
 		private state: StateService,
 		private dispatch: DispatchService
 	) {
-		this.subscription = state.getPath((path: BaconPath) => {
+		this.subscription = state.getPath().subscribe(path => {
 			this.path = path;
 			this.pathString();
 		});
 	}
 
 	pathString() {
-		this.pathStr = this.path.nodes.reduce((arr, { actor, movie }) => {
-			movie = movie ? movie.title + ' - ' + movie.year : '';
-			return arr.concat([actor.name + ' - ' + actor.birthDeath, movie]);
-		}, []);
+		// this.pathStr = this.path.nodes.reduce((arr, node): string[] => {
+		// 	const actor: string = node.actor.name + ' - ' + node.actor.birthDeath;
+		// 	const movie: string = node.movie ? node.movie.title + ' - ' + String(node.movie.year) : '';
+		// 	return arr.concat([actor, movie]);
+		// }, []);
 	}
 
 	ngOnDestroy() {

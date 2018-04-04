@@ -23,11 +23,10 @@ export class ChoiceComponent implements OnDestroy {
 		private dispatch: DispatchService,
 		private state: StateService
 	) {
-		console.log('choice loaded')
-		// this.subscription = state.getChoice((choice: ActorChoice) => {
-		// 	this.choice = choice;
-		// 	this.choiceString();
-		// });
+		this.subscription = state.getChoice().subscribe((choice: ActorChoice) => {
+			this.choice = choice;
+			this.choiceString();
+		});
 	}
 
 	choiceString() {
@@ -37,7 +36,7 @@ export class ChoiceComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		// this.subscription.unsubscribe();
+		this.subscription.unsubscribe();
 	}
 }
 

@@ -5,9 +5,11 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
-// import { map, reduce, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+import { map, reduce, tap, toArray } from 'rxjs/operators';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/reduce';
+import 'rxjs/add/operator/toArray';
 
 import { DispatchService } from './dispatch.service';
 import { StateService } from './state.service';
@@ -23,16 +25,23 @@ export class ChooseGuard implements CanActivate {
 		private router: Router
 	) { }
 
-	canActivate(next: ActivatedRouteSnapshot): Observable<boolean> | boolean {
+	canActivate(next: ActivatedRouteSnapshot): Observable<boolean> {
 		const name = next.params.name.replace(/-/g, ' ');
 
 		return Observable.merge(
 			this.state.getChoice(),
 			this.state.getStoredChoices()
 		)
-			.reduce((valid, curr) => (
-				valid || (curr && curr.name === name ? true : false)
-			), false);
+			.toArray()
+			.map((choices) => {
+				if (choices.some(c => c && c.name === name)) {
+					return true;
+				}
+
+				this.dispatch.search(name)
+				this.router.navigateByUrl('/');
+				return false;
+			});
 	}
 }
 
