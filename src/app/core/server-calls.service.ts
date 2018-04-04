@@ -19,8 +19,7 @@ export class ServerCallsService {
 
 	constructor(private http: HttpClient) { }
 
-
-	getPath(term: number | string): Observable<ActorChoice | BaconPath> {
+	search(term: number | string): Observable<ActorChoice | BaconPath> {
 		const [ url, body ] = typeof term === 'string' ? ['/api/name', { name: term }] : ['/api/nconst', { nconst: term }];
 
 		return this.http.post(url, body)

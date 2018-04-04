@@ -1,8 +1,11 @@
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { StateService } from '../core/state.service';
+import { ActorID } from '../shared/actor';
 
 
 @Component({
@@ -10,13 +13,18 @@ import { StateService } from '../core/state.service';
 	templateUrl: './loading.component.html',
 	styleUrls: ['./loading.component.css']
 })
-export class LoadingComponent {
-	private searchTerm: string;
+export class LoadingComponent implements OnDestroy {
+	private searchTerm: ActorID;
+	private subscription: Subscription;
 
 	constructor(private state: StateService) {
-		state.searchTerm.subscribe(val => (
-			this.searchTerm = typeof val === 'number' ? `index: ${val}` : val
+		this.subscription = state.getSearchTerm().subscribe((searchTerm) => (
+			this.searchTerm = typeof searchTerm === 'number' ? `index: ${searchTerm}` : searchTerm
 		));
+	}
+
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
 	}
 }
 

@@ -15,14 +15,3 @@ export interface BaconPath {
 	nodes: BaconPathNode[];
 }
 
-
-export const copyBaconPath = (path: BaconPath): BaconPath => (
-	!path ? null : {
-		nconst: path.nconst,
-		nodes: path.nodes.map(({ actor, movie }) => ({
-			actor: actor && Object.assign({}, actor),
-			movie: movie && Object.assign({}, movie)
-		}))
-	}
-);
-

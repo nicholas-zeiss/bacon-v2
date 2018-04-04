@@ -16,20 +16,5 @@ export interface ActorChoice {
 }
 
 
-export type Nconst = number | string;
-
-
-export const copyActorChoice = (choice: ActorChoice) => (
-	!choice ? null : {
-		actors: choice.actors.map((actor: Actor) => Object.assign({}, actor)),
-		name: choice.name
-	}
-);
-
-
-export const isActorChoice = (choice: any): choice is ActorChoice => (
-	typeof choice.name === 'string' &&
-	choice.actors instanceof Array &&
-	choice.actors.every(actor => typeof actor.name === 'string')
-);
+export type ActorID = number | string;
 

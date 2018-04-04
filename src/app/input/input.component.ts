@@ -3,8 +3,7 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
-
+import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
 
 
@@ -14,18 +13,21 @@ import { StateService } from '../core/state.service';
 	styleUrls: ['./input.component.css']
 })
 export class InputComponent {
-	inputDisabled: boolean;
-	searchForm = new FormControl('', Validators.required);
+	private inputDisabled: boolean;
+	private searchForm = new FormControl('', Validators.required);
 
-	constructor(private state: StateService) {
-		state.inputDisabled.subscribe(disabled => {
-			this.inputDisabled = disabled;
+	constructor(
+		private dispatch: DispatchService,
+		private state: StateService
+	) {
+		state.getInputDisabled().subscribe(disabled => {
 			disabled ? this.searchForm.disable() : this.searchForm.enable();
+			this.inputDisabled = disabled;
 		});
 	}
 
 	searchActor() {
-		this.state.search(this.searchForm.value);
+		this.dispatch.search(this.searchForm.value);
 		this.searchForm.reset();
 	}
 }

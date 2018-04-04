@@ -4,6 +4,7 @@ import { Component, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
 import { Actor, ActorChoice } from '../shared/actor';
 
@@ -18,11 +19,15 @@ export class ChoiceComponent implements OnDestroy {
 	choiceStr: string[];
 	subscription: Subscription;
 
-	constructor(private state: StateService) {
-		this.subscription = state.choice.subscribe(val => {
-			this.choice = val;
-			this.choiceString();
-		});
+	constructor(
+		private dispatch: DispatchService,
+		private state: StateService
+	) {
+		console.log('choice loaded')
+		// this.subscription = state.getChoice((choice: ActorChoice) => {
+		// 	this.choice = choice;
+		// 	this.choiceString();
+		// });
 	}
 
 	choiceString() {
@@ -32,7 +37,7 @@ export class ChoiceComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.subscription.unsubscribe();
+		// this.subscription.unsubscribe();
 	}
 }
 

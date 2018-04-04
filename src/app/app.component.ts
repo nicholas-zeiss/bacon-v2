@@ -2,8 +2,7 @@
 
 import { Component } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
-
+import { DispatchService } from './core/dispatch.service';
 import { StateService } from './core/state.service';
 
 
@@ -13,10 +12,13 @@ import { StateService } from './core/state.service';
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-	loading: boolean;
+	private loading: boolean;
 
-	constructor (private state: StateService) {
-		state.loading.subscribe(val => this.loading = val);
+	constructor (
+		private dispatch: DispatchService,
+		private state: StateService
+	) {
+		state.getLoading().subscribe(loading => this.loading = loading);
 	}
 }
 

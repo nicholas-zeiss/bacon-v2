@@ -4,10 +4,9 @@ import { Component, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { Actor } from '../shared/actor';
-import { BaconPath, BaconPathNode } from '../shared/bacon-path';
-import { Movie } from '../shared/movie';
+import { BaconPath } from '../shared/bacon-path';
 
 
 @Component({
@@ -20,15 +19,18 @@ export class DisplayComponent implements OnDestroy {
 	pathStr: string[];
 	subscription: Subscription;
 
-	constructor(private state: StateService) {
-		this.subscription = state.path.subscribe((path: BaconPath) => {
+	constructor(
+		private state: StateService,
+		private dispatch: DispatchService
+	) {
+		this.subscription = state.getPath((path: BaconPath) => {
 			this.path = path;
 			this.pathString();
 		});
 	}
 
-	pathString(): void {
-		this.pathStr = this.path.nodes.reduce((arr, {actor, movie}: BaconPathNode): string[] => {
+	pathString() {
+		this.pathStr = this.path.nodes.reduce((arr, { actor, movie }) => {
 			movie = movie ? movie.title + ' - ' + movie.year : '';
 			return arr.concat([actor.name + ' - ' + actor.birthDeath, movie]);
 		}, []);

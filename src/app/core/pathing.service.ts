@@ -10,22 +10,22 @@ export class PathingService {
 
 	constructor(private location: Location, private router: Router) { }
 
-	pathToChoose(name: string): void {
+	pathToChoice(name: string): void {
 		const path = `/choose/${name.replace(/\s/g, '-')}`;
 
-		this.router.navigateByUrl(path)
-			.then(() => this.location.replaceState(path));
+		this.router.navigateByUrl(path);
 	}
 
 	pathToDisplay(nconst: number): void {
 		const path = `/display/${nconst}`;
 
-		this.router.navigateByUrl(path)
-			.then(() => this.location.replaceState(path));
+		this.router.navigateByUrl(path);
 	}
 
 	pathToHome(): void {
-		this.router.navigateByUrl('/');
+		if (this.router.url !== '/') {
+			this.router.navigateByUrl('/');
+		}
 	}
 }
 

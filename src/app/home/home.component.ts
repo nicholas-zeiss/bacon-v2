@@ -14,12 +14,11 @@ import { SearchError } from '../shared/search-error';
 	styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnDestroy {
-	error: SearchError;
-	subscription: Subscription;
+	private error: SearchError;
+	private subscription: Subscription;
 
-	constructor(private state: StateService) {
-		this.subscription = state.searchError
-			.subscribe(err => this.error = err);
+	constructor (private state: StateService) {
+		this.subscription = state.getSearchError().subscribe(err => this.error = err);
 	}
 
 	ngOnDestroy() {

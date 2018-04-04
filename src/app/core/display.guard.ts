@@ -6,6 +6,7 @@ import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { DispatchService } from './dispatch.service';
 import { StateService } from './state.service';
 import { BaconPath } from '../shared/bacon-path';
 
@@ -13,28 +14,42 @@ import { BaconPath } from '../shared/bacon-path';
 @Injectable()
 export class DisplayGuard implements CanActivate {
 	private currPath: BaconPath;
-	private subscription: Subscription;
+	private nconst: number;
+	private storedPath: BaconPath;
+	private subs: Subscription[];
 
 	constructor(
 		private state: StateService,
+		private dispatch: DispatchService,
 		private location: Location,
 		private router: Router
 	) {
-		this.subscription = state.path.subscribe(val => this.currPath = val);
+		const nconst = router.url.match(/\/display\/(.+)$/)[1];
+		this.nconst = Number(nconst);
+
+		this.subs.push(state.getPath((path: BaconPath) => {
+			this.currPath = path;
+		}));
+
+		this.subs.push(state.getStoredPath((path: BaconPath) => {
+			this.storedPath = path;
+		}), this.nconst);
 	}
 
 	canActivate(next: ActivatedRouteSnapshot): boolean {
-		const nconst = Number(next.params.nconst);
+		this.subs.forEach(sub => sub.unsubscribe());
 
-		this.subscription.unsubscribe();
+		if ((this.currPath || {}).nconst !== this.nconst) {
+			if (!this.storedPath) {
+				this.dispatch.search(this.nconst);
+				this.router
+					.navigateByUrl('', { skipLocationChange: true })
+					.then(() => this.location.replaceState(next.url.join('/')));
 
-		if ((this.currPath || {}).nconst !== nconst && !this.state.loadStored(nconst)) {
-			this.state.search(nconst);
-			this.router
-				.navigateByUrl('', { skipLocationChange: true })
-				.then(() => this.location.replaceState(next.url.join('/')));
+				return false;
+			}
 
-			return false;
+			this.dispatch.displayPath(this.storedPath);
 		}
 
 		return true;
