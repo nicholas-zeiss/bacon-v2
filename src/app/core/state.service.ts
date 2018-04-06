@@ -13,17 +13,7 @@ import { Action, AppState, AppStore, INITIAL_STATE, STORE } from '../shared/app-
 import { BaconPath, BaconPathStore } from '../shared/bacon-path';
 import { SearchError } from '../shared/search-error';
 import { View } from '../shared/view';
-
-
-const shallowEquals = (a, b) => {
-	for (const key in a) {
-		if (a[key] !== b[key]) {
-			return false;
-		}
-	}
-
-	return true;
-};
+import { deepEquals } from '../shared/utils';
 
 
 @Injectable()
@@ -33,7 +23,7 @@ export class StateService {
 	constructor() {
 		this.store.actions
 			.scan((state: AppState, action: Action) => action(state), INITIAL_STATE)
-			.distinctUntilChanged(shallowEquals)
+			.distinctUntilChanged(deepEquals)
 			.subscribe(state => this.store.states.next(state));
 	}
 

@@ -1,6 +1,12 @@
 
 
 <h1>Which of these actors did you mean?</h1>
-<li *ngFor="let actor of choiceStr" class="actor-choice">{{ actor }}</li>
+<div *ngFor="let actor of choice" class="actor-choice">
+	<div>
+		<h1>{{ actor.name }}</h1>
+		<p>{{ actor.birthDeath }}</p>
+	</div>
+	<p>{{ actor.jobs }}</p>
+</div>
 <button (click)="reset()">New Search</button>
 

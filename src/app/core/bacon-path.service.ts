@@ -2,6 +2,8 @@
 
 import { Injectable } from '@angular/core';
 
+import 'rxjs/add/operator/distinctUntilChanged';
+
 import { DispatchService } from './dispatch.service';
 import { ServerCallsService } from './server-calls.service';
 import { StateService } from './state.service';
@@ -10,6 +12,7 @@ import { Actor, ChoiceStore, NconstStore } from '../shared/actor';
 import { BaconPath, BaconPathStore, isBaconPath } from '../shared/bacon-path';
 import { SearchError } from '../shared/search-error';
 import { View } from '../shared/view';
+import { deepEquals } from '../shared/utils';
 
 
 @Injectable()
@@ -23,10 +26,9 @@ export class BaconPathService {
 		private serverCalls: ServerCallsService,
 		private state: StateService
 	) {
-		state.getStores().subscribe(stores => {
-			console.log(stores);
-			Object.assign(this, stores);
-		});
+		state.getStores()
+			.distinctUntilChanged(deepEquals)
+			.subscribe(stores => Object.assign(this, stores));
 	}
 
 
@@ -34,14 +36,14 @@ export class BaconPathService {
 		const origName = name;
 		name = name.toLowerCase();
 
-		if (this.storedActors[name]) {
-			if (this.storedActors[name].length === 1) {
-				const nconst = this.storedActors[name][0];
-				const path = this.storedBaconPaths[nconst];
+		if (this.storedActors.has(name)) {
+			if (this.storedActors.get(name).size === 1) {
+				const nconst = Array.from(this.storedActors.get(name))[0];
+				const path = this.storedBaconPaths.get(nconst);
 				this.displayBaconPath(path);
 
 			} else {
-				const actors = this.storedChoices[name];
+				const actors = this.storedChoices.get(name);
 				this.displayActorChoice(actors);
 			}
 

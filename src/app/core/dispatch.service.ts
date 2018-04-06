@@ -15,7 +15,6 @@ import { View } from '../shared/view';
 export class DispatchService {
 	private actions: Subject<Action> = STORE.actions;
 
-
 	private sendAction(obj: AppStateUpdate) {
 		this.actions.next((prev: AppState) => (
 			Object.assign({}, prev, obj)
