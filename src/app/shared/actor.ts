@@ -15,3 +15,8 @@ export type ChoiceStore = Map<string, Actor[]>;
 
 export type NconstStore = Map<string, Set<number>>;
 
+
+export function isActor(obj): obj is Actor {
+	return (<Actor>obj).name !== undefined;
+}
+

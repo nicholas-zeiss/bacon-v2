@@ -49,7 +49,10 @@ export class DispatchService {
 				storedBaconPaths: new Map(prev.storedBaconPaths)
 			};
 
-			next.storedActors.set(name, new Set([nconst]));
+			const nconsts = next.storedActors.get(name) || new Set<number>();
+			nconsts.add(nconst);
+
+			next.storedActors.set(name, nconsts);
 			next.storedBaconPaths.set(nconst, path);
 
 			return Object.assign({}, prev, next);
@@ -110,55 +113,5 @@ export class DispatchService {
 	setCurrBaconPath(path: BaconPath) {
 		this.sendAction({ currBaconPath: path });
 	}
-
-
-	// displayChoice = (choice: ActorChoice) => {
-	// 	const update = {
-	// 		inputDisabled: true,
-	// 		loading: false,
-	// 		searchError: null,
-	// 		searchTerm: null
-	// 	};
-
-	// 	this.actions.next((prev: AppState) => Object.assign({}, prev, update, { choice }));
-	// }
-
-
-	// displayPath = (path: BaconPath) => {
-	// 	const update = {
-	// 		inputDisabled: true,
-	// 		loading: false,
-	// 		searchError: null,
-	// 		searchTerm: null
-	// 	};
-
-	// 	this.actions.next((prev: AppState) => Object.assign({}, prev, update, { path }));
-	// }
-
-
-	// storeChoice = (choice: ActorChoice) => {
-	// 	this.actions.next((prev: AppState) => (
-	// 		Object.assign({}, prev, { storedChoices: [...prev.storedChoices, choice] })
-	// 	));
-	// }
-
-
-	// storePath = (path: BaconPath) => {
-	// 	this.actions.next((prev: AppState) => (
-	// 		Object.assign({}, prev, { storedPaths: [...prev.storedPaths, path] })
-	// 	));
-	// }
-
-
-	// reset = () => {
-	// 	const update = {
-	// 		inputDisabled: false,
-	// 		loading: false,
-	// 		searchError: null,
-	// 		searchTerm: null
-	// 	};
-
-	// 	this.actions.next((prev: AppState) => Object.assign({}, prev, update));
-	// }
 }
 

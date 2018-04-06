@@ -41,34 +41,45 @@ export class BaconPathService {
 				const nconst = Array.from(this.storedActors.get(name))[0];
 				const path = this.storedBaconPaths.get(nconst);
 				this.displayBaconPath(path);
-
 			} else {
 				const actors = this.storedChoices.get(name);
 				this.displayActorChoice(actors);
 			}
 
-		} else {
-			this.dispatch.setSearchName(origName);
-			this.dispatch.setViewLoading();
-			this.serverCalls.searchName(name)
-				.subscribe(this.handleSuccess, this.handleError);
+			return;
 		}
+
+		this.dispatch.setSearchName(origName);
+		this.dispatch.setViewLoading();
+		this.serverCalls
+			.searchName(name)
+			.subscribe(this.handleSuccess, this.handleError);
+	}
+
+
+	searchNconst(nconst: number) {
+		if (this.storedBaconPaths.has(nconst)) {
+			const path = this.storedBaconPaths.get(nconst);
+			this.dispatch.setCurrBaconPath(path);
+			this.dispatch.setViewDisplay();
+			return;
+		}
+
+		this.dispatch.setSearchName(`index: ${nconst}`);
+		this.dispatch.setViewLoading();
+		this.serverCalls.searchNconst(nconst)
+			.subscribe(this.handleSuccess, this.handleError);
 	}
 
 
 	handleSuccess = (res: Actor[] | BaconPath) => {
 		if (isBaconPath(res)) {
-			if (!this.storedBaconPaths[res[0].actor._id]) {
-				this.dispatch.addBaconPathToStore(res);
-			}
-
+			res.forEach(({ actor, movie }) => actor.imgUrl = actor.imgUrl || '/assets/no-image.png');
+			this.dispatch.addBaconPathToStore(res);
 			this.displayBaconPath(res);
 
 		} else {
-			if (!this.storedBaconPaths[res[0]._id]) {
-				this.dispatch.addActorChoiceToStore(res);
-			}
-
+			this.dispatch.addActorChoiceToStore(res);
 			this.displayActorChoice(res);
 		}
 	}

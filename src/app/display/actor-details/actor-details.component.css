@@ -1,0 +1,59 @@
+
+
+h2, p, div {
+	flex-shrink: 0;
+}
+
+
+h2 {
+	font-size: 1.2rem;
+	font-weight: bold;
+	line-height: 1.1;
+	margin: .2rem 0 0;
+	max-height: 4rem;
+	overflow: hidden;
+	text-align: center;
+}
+
+
+h2, p {
+	-webkit-hyphens: auto;
+		 -moz-hyphens: auto;
+			-ms-hyphens: auto;
+					hyphens: auto;
+}
+
+
+p {
+	margin:	0;
+	text-align: center;
+}
+
+
+.dob {
+	font-size: .8rem;
+	margin-top: -.2rem;
+}
+
+
+.jobs {
+	font-size: .8rem;
+}
+
+
+div {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 1;
+	margin-top: .2rem;
+}
+
+img {
+	border-radius: 10px;
+	border: 2px solid black;
+	box-sizing: border-box;
+	max-height: 10rem;
+	max-width: 10rem;
+}
+

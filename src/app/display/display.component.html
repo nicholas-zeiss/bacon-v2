@@ -1,7 +1,25 @@
 
 
-<p> display </p>
-<p>{{ path| json }}</p>
-<!-- <li *ngFor="let node of pathStr">{{ node }}</li>
-<button (click)="dispatch.reset()">New Search</button> -->
+<section class="display-header">
+	<h2>{{ name }}</h2>
+	<button type="button" (click)="reset()">Reset</button>
+</section>
+<section class="content-container" >
+	<div class="content">
+		<div *ngFor="let row of nodeRows" [ngClass]="row.classNames">
+			<div *ngFor="let node of row.nodes" [ngClass]="node.classNames">
+				<app-actor-details
+					*ngIf="node.type === 'actor'"
+					[actor]="node.actor"
+					class="actor-details">
+				</app-actor-details>
+				<app-movie-details
+					*ngIf="node.type !== 'actor'"
+					[movieNode]="node"
+					[ngClass]="node.classNames">
+				</app-movie-details>
+			</div>
+		</div>
+	</div>
+</section>
 
