@@ -3,28 +3,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
-import { ChooseGuard } from './choose.guard';
+import { BaconPathService } from './bacon-path.service';
 import { DispatchService } from './dispatch.service';
-import { DisplayGuard } from './display.guard';
-import { PathingService } from './pathing.service';
 import { ServerCallsService } from './server-calls.service';
 import { StateService } from './state.service';
 
 
 @NgModule({
-	imports: [
-		CommonModule,
-		HttpClientModule,
-		RouterModule
-	],
-	exports: [RouterModule],
+	imports: [HttpClientModule],
 	providers: [
-		ChooseGuard,
+		BaconPathService,
 		DispatchService,
-		DisplayGuard,
-		PathingService,
 		ServerCallsService,
 		StateService
 	]

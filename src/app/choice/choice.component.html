@@ -1,5 +1,6 @@
 
 
-<li *ngFor="let actor of choiceStr">{{ actor }}</li>
-<button (click)="dispatch.reset()">New Search</button>
+<h1>Which of these actors did you mean?</h1>
+<li *ngFor="let actor of choiceStr" class="actor-choice">{{ actor }}</li>
+<button (click)="reset()">New Search</button>
 

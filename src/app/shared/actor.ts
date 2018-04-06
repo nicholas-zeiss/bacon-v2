@@ -10,11 +10,8 @@ export interface Actor {
 }
 
 
-export interface ActorChoice {
-	name: string;
-	actors: Actor[];
-}
+export type ChoiceStore = Map<string, Actor[]>;
 
 
-export type ActorID = number | string;
+export type NconstStore = Map<string, Set<number>>;
 

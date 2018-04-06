@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { Actor, ActorChoice } from '../shared/actor';
+import { Actor } from '../shared/actor';
 
 
 @Component({
@@ -15,7 +15,7 @@ import { Actor, ActorChoice } from '../shared/actor';
 	styleUrls: ['./choice.component.css']
 })
 export class ChoiceComponent implements OnDestroy {
-	choice: ActorChoice;
+	choice: Actor[];
 	choiceStr: string[];
 	subscription: Subscription;
 
@@ -23,17 +23,33 @@ export class ChoiceComponent implements OnDestroy {
 		private dispatch: DispatchService,
 		private state: StateService
 	) {
-		this.subscription = state.getChoice().subscribe((choice: ActorChoice) => {
-			this.choice = choice;
-			this.choiceString();
-		});
+		this.subscription = state
+			.getCurrActorChoice()
+			.subscribe((choice: Actor[]) => {
+				this.choice = choice;
+				this.choiceString();
+			});
 	}
 
+
 	choiceString() {
-		this.choiceStr = this.choice.actors.map((actor: Actor) => (
+		if (!this.choice) {
+			this.choiceStr = [];
+			return;
+		}
+
+		this.choiceStr = this.choice.map((actor: Actor) => (
 			actor.name + ' ' + actor.birthDeath
 		));
 	}
+
+
+	reset() {
+		this.dispatch.enableInput();
+		this.dispatch.setCurrActorChoice(null);
+		this.dispatch.setViewHome();
+	}
+
 
 	ngOnDestroy() {
 		this.subscription.unsubscribe();

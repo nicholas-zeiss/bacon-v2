@@ -3,47 +3,48 @@
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { ActorChoice, ActorID } from './actor';
-import { BaconPath } from './bacon-path';
+import { Actor, ChoiceStore, NconstStore } from './actor';
+import { BaconPath, BaconPathStore } from './bacon-path';
 import { SearchError } from './search-error';
+import { View } from './view';
 
 
 export interface AppState {
-	choice: ActorChoice;
+	currActorChoice: Actor[];
 	inputDisabled: boolean;
-	loading: boolean;
-	path: BaconPath;
+	currBaconPath: BaconPath;
 	searchError: SearchError;
-	searchTerm: ActorID;
-	storedChoices: ActorChoice[];
-	storedPaths: BaconPath[];
+	searchName: string;
+	storedActors: NconstStore;
+	storedBaconPaths: BaconPathStore;
+	storedActorChoices: ChoiceStore;
+	view: View;
 }
 
 
 export interface AppStateUpdate {
-	choice?: ActorChoice;
+	currActorChoice?: Actor[];
 	inputDisabled?: boolean;
-	loading?: boolean;
-	path?: BaconPath;
+	currBaconPath?: BaconPath;
 	searchError?: SearchError;
-	searchTerm?: ActorID;
-	storedChoices?: ActorChoice[];
-	storedPaths?: BaconPath[];
+	searchName?: string;
+	storedActors?: NconstStore;
+	storedBaconPaths?: BaconPathStore;
+	storedActorChoices?: ChoiceStore;
+	view?: View;
 }
 
 
-export type AppStateProperty = boolean | number | string | ActorChoice | ActorChoice[] | BaconPath | BaconPath[] | SearchError;
-
-
 export const INITIAL_STATE = {
-	choice: null,
+	currActorChoice: null,
 	inputDisabled: false,
-	loading: false,
-	path: null,
+	currBaconPath: null,
 	searchError: null,
-	searchTerm: null,
-	storedChoices: [],
-	storedPaths: []
+	searchName: null,
+	storedActors: new Map<string, Set<number>>(),
+	storedBaconPaths: new Map<number, BaconPath>(),
+	storedActorChoices: new Map<string, Actor[]>(),
+	view: View.Home
 };
 
 

@@ -1,7 +1,6 @@
 
 
 import { Actor } from './actor';
-import { AppStateProperty } from './app-state';
 import { Movie } from './movie';
 
 
@@ -11,13 +10,13 @@ export interface BaconPathNode {
 }
 
 
-export interface BaconPath {
-	nconst: number;
-	nodes: BaconPathNode[];
-}
+export type BaconPath = BaconPathNode[];
 
 
-export function isBaconPath(obj: AppStateProperty): obj is BaconPath {
-	return typeof (<BaconPath>obj).nconst === 'number';
+export type BaconPathStore = Map<number, BaconPath>;
+
+
+export function isBaconPath(obj): obj is BaconPath {
+	return (<BaconPath>obj)[0].movie !== undefined;
 }
 

@@ -11,6 +11,30 @@ body {
 }
 
 
+.view {
+	align-items: center;
+	background-color: #f3f3f3;
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 6.625rem);
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+
+.view > * {
+	align-items: center;
+	color: #353535;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	width: 100%;
+}
+
+
 @media (max-width: 440px) {
 	header {
 		height: 8.125rem;

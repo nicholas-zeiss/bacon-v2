@@ -16,17 +16,18 @@ import { BaconPath } from '../shared/bacon-path';
 })
 export class DisplayComponent implements OnDestroy {
 	path: BaconPath;
-	pathStr: any[];
+	// pathStr: any[];
 	subscription: Subscription;
 
 	constructor(
 		private state: StateService,
 		private dispatch: DispatchService
 	) {
-		this.subscription = state.getPath().subscribe(path => {
-			this.path = path;
-			this.pathString();
-		});
+		this.subscription = state
+			.getCurrBaconPath().subscribe(path => {
+				this.path = path;
+				// this.pathString();
+			});
 	}
 
 	pathString() {

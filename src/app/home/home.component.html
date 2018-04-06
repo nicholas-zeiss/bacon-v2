@@ -1,19 +1,9 @@
 
 
-<section>
-	<a
-		*ngIf="!error; else elseBlock"
-		href="https://commons.wikimedia.org/wiki/File:Kevin_Bacon_by_David_Shankbone.jpg"
-		id="home-bacon-img"
-		target="_blank"
-	>
-	</a>
-	<ng-template #elseBlock>
-		<h2>{{ error.message }}</h2>
-		<p *ngIf="error.url">
-			If this does not seem correct, please make sure you are using
-			the same spelling as <a href="{{ error.url }}" target="_blank">IMDb</a>.
-		</p>
-	</ng-template>
-</section>
+<a
+	href="https://commons.wikimedia.org/wiki/File:Kevin_Bacon_by_David_Shankbone.jpg"
+	id="home-bacon-img"
+	target="_blank"
+>
+</a>
 

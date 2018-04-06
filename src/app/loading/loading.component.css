@@ -1,15 +1,5 @@
 
 
-section {
-	align-items: center;
-	display: flex;
-	flex-direction: column;
-	flex: 1 0 auto;
-	justify-content: center;
-	width: 100%;
-}
-
-
 h1 {
 	color: #353535;
 	font-size: 30px;

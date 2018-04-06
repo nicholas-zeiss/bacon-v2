@@ -1,16 +1,5 @@
 
 
-section {
-	align-items: center;
-	color: #353535;
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	justify-content: center;
-	width: 100%;
-}
-
-
 @keyframes toggle {
 	0% {
 		opacity: 0;
@@ -22,7 +11,7 @@ section {
 }
 
 
-section > a {
+a {
 	background-image: url('/assets/bacon-home.jpg');
 	background-position: 50% 10%;
 	background-repeat: no-repeat;
@@ -40,49 +29,7 @@ section > a {
 }
 
 
-section > a.toggle {
+a.toggle {
 	animation: 2.5s toggle;
 }
-
-
-section > h2 {
-	font-size: 30px;
-	margin: 0 1rem 1.5rem;
-	text-align: center;
-	text-shadow: 1px 1px 1px #d6d6d6;
-}
-
-
-section > p {
-	font-size: 20px;
-	margin: 0 1rem 2rem;
-	text-align: center;
-}
-
-
-section > p > a {
-	color: #3f35ff;
-	font-weight: 600;
-}
-
-
-section > button {
-	background-color: #23bc61;
-	border-radius: 3px;
-	border: none;
-	box-shadow: 0 0 6px 1px #666;
-	color: #f8f8f8;
-	cursor: pointer;
-	font-size: 1.5rem;
-	margin: 0;
-	outline: none;
-	padding: .2rem .5rem;
-	text-shadow: 1px 1px 1px #136b36;
-}
-
-
-section > button:hover {
-	background-color: #1b914a;
-}
-
 
