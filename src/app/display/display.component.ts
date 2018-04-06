@@ -1,6 +1,7 @@
 
 
 import { Component, OnDestroy } from '@angular/core';
+import { trigger, state, keyframes, style, animate, transition } from '@angular/animations';
 
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/first';
@@ -22,6 +23,42 @@ const getRowIndex = (pathIndex) => (
 
 
 @Component({
+	animations: [
+		trigger('detailNode', [
+			state('firstHiddenActor', style({ display: 'none' })),
+			state('firstHiddenMovie', style({ display: 'none' })),
+			state('firstHiddenMovieShort', style({ display: 'none' })),
+			state('hidden', style({ visibility: 'hidden' })),
+			state('visible', style({ visibility: 'visible' })),
+			transition('firstHiddenActor => visible', [
+				animate(1000, keyframes([
+					style({ opacity: 0, width: '0rem', offset:  0}),
+					style({ opacity: 0, width: '10.5rem', offset:  .5}),
+					style({ opacity: 1, width: '10.5rem', offset: 1 })
+				]))
+			]),
+			transition('firstHiddenMovie => visible', [
+				animate(1000, keyframes([
+					style({ opacity: 0, width: '0rem', offset: 0 }),
+					style({ opacity: 0, width: '15.5rem', offset: .5 }),
+					style({ opacity: 1, width: '15.5rem', offset: 1 })
+				]))
+			]),
+			transition('firstHiddenMovieShort => visible', [
+				animate(1000, keyframes([
+					style({ opacity: 0, width: '0rem', offset: 0 }),
+					style({ opacity: 0, width: '8.5rem', offset: .5 }),
+					style({ opacity: 1, width: '8.5rem', offset: 1 })
+				]))
+			]),
+			transition('hidden => visible', [
+				animate(1000, keyframes([
+					style({ visibility: 'visible', opacity: 0 }),
+					style({ visibility: 'visible', opacity: 5 })
+				]))
+			])
+		]),
+	],
 	selector: 'app-display',
 	templateUrl: './display.component.html',
 	styleUrls: ['./display.component.css']
@@ -32,10 +69,10 @@ export class DisplayComponent implements OnDestroy {
 	private subscription: Subscription;
 
 	constructor(
-		private state: StateService,
+		private appState: StateService,
 		private dispatch: DispatchService
 	) {
-		this.subscription = state
+		this.subscription = appState
 			.getCurrBaconPath()
 			.first()
 			.subscribe(path => {
@@ -46,21 +83,34 @@ export class DisplayComponent implements OnDestroy {
 				const nodeTypes = getNodeTypes(path.length * 2 - 1);
 				this.name = path[0].actor.name;
 
-				path
-					.reduce((flat, { actor, movie }, i) => {
-						flat.push(new ActorNode(actor));
+				const flattened = path.reduce((flat, { actor, movie }, i) => {
+					const actorRow = getRowIndex(2 * i);
+					const actorNode = new ActorNode(actor, actorRow);
 
-						if (movie) {
-							flat.push(new MovieNode(movie, nodeTypes[2 * i + 1]));
-						}
+					flat.push(actorNode);
+					this.nodeRows[actorRow] = this.nodeRows[actorRow] || new NodeRow(actorRow);
+					this.nodeRows[actorRow].nodes.push(actorNode);
 
-						return flat;
-					}, [])
-					.forEach((node, i) => {
-						const rowIndex = getRowIndex(i);
-						this.nodeRows[rowIndex] = this.nodeRows[rowIndex] || new NodeRow(rowIndex);
-						this.nodeRows[rowIndex].nodes.push(node);
-					});
+					if (movie) {
+						const movieRow = getRowIndex(2 * i + 1);
+						const movieNode = new MovieNode(movie, nodeTypes[2 * i + 1], movieRow);
+
+						flat.push(movieNode);
+						this.nodeRows[movieRow] = this.nodeRows[movieRow] || new NodeRow(movieRow);
+						this.nodeRows[movieRow].nodes.push(movieNode);
+					}
+
+					return flat;
+				}, []);
+
+				// TODO: CLEAR THESE ON DESTROY
+				flattened.forEach((node, i) => {
+					const row = this.nodeRows[getRowIndex(i)];
+					setTimeout(() => {
+						row.visibility = 'visible';
+						node.show();
+					}, 1000 * i);
+				});
  			});
 	}
 

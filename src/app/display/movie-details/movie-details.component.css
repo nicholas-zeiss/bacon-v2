@@ -1,0 +1,16 @@
+
+
+.movie-details {
+	box-sizing: border-box;
+}
+
+
+.arrow-row {
+	width: 50rem;
+}
+
+
+.float-right > svg {
+	float: right;
+}
+

@@ -70,6 +70,11 @@ export class DispatchService {
 	}
 
 
+	setViewError() {
+		this.sendAction({ view: View.Error });
+	}
+
+
 	setViewHome() {
 		this.sendAction({ view: View.Home });
 	}
@@ -77,11 +82,6 @@ export class DispatchService {
 
 	setViewLoading() {
 		this.sendAction({ view: View.Loading });
-	}
-
-
-	setViewError() {
-		this.sendAction({ view: View.Error });
 	}
 
 

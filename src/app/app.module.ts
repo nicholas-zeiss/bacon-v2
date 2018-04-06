@@ -6,10 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-// import { ChoiceComponent } from './choice/choice.component';
-import { ChoiceModule } from './choice/choice.module';
+import { ChoiceComponent } from './choice/choice.component';
 import { CoreModule } from './core/core.module';
-// import { DisplayCpom } from './display/display.module';
 import { DisplayModule } from './display/display.module';
 import { ErrorComponent } from './error/error.component';
 import { HomeComponent } from './home/home.component';
@@ -20,21 +18,20 @@ import { LoadingComponent } from './loading/loading.component';
 @NgModule({
 	declarations: [
 		AppComponent,
+		ChoiceComponent,
 		ErrorComponent,
 		HomeComponent,
 		InputComponent,
 		LoadingComponent
 	],
 	entryComponents: [
-		// ChoiceComponent,
-		// DisplayComponent,
+		ChoiceComponent,
 		ErrorComponent,
 		HomeComponent,
 		LoadingComponent
 	],
 	imports: [
 		BrowserModule,
-		ChoiceModule,
 		CoreModule,
 		DisplayModule,
 		ReactiveFormsModule

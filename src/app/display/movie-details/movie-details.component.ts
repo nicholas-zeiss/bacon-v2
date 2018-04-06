@@ -11,6 +11,6 @@ import { MovieNode } from '../layout-details';
 	styleUrls: ['./movie-details.component.css']
 })
 export class MovieDetailsComponent {
-	@Input() movieNode: MovieNode;
+	@Input() node: MovieNode;
 }
 

@@ -2,7 +2,7 @@
 
 import { Component, Input } from '@angular/core';
 
-import { Actor } from '../../shared/actor';
+import { ActorNode } from '../layout-details';
 
 
 @Component({
@@ -11,5 +11,6 @@ import { Actor } from '../../shared/actor';
 	styleUrls: ['./actor-details.component.css']
 })
 export class ActorDetailsComponent {
-	@Input() actor: Actor;
+	@Input() node: ActorNode;
 }
+

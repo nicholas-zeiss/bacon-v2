@@ -1,12 +1,14 @@
 
 
-<h2>{{ actor.name }}</h2>
-<p class="dob">{{ actor.birthDeath }}</p>
-<div>
-	<a href="{{ actor.imgInfo }}" target="_blank" *ngIf="actor.imgInfo">
-		<img alt="{{ actor.name }}" title="{{ actor.name }}" src="{{ actor.imgUrl }}"/>
-	</a>
-	<img alt="{{ actor.name }}" title="{{ actor.name }}" *ngIf="!actor.imgInfo" src="{{ actor.imgUrl }}"/>
-	<p class="jobs" >{{ actor.jobs }}</p>
+<div class="actor-details">
+	<h2>{{ node.actor.name }}</h2>
+	<p class="dob">{{ node.actor.birthDeath }}</p>
+	<div>
+		<a href="{{ node.actor.imgInfo }}" target="_blank" *ngIf="node.actor.imgInfo">
+			<img alt="{{ node.actor.name }}" title="{{ node.actor.name }}" src="{{ node.actor.imgUrl }}"/>
+		</a>
+		<img alt="{{ node.actor.name }}" title="{{ node.actor.name }}" *ngIf="!node.actor.imgInfo" src="{{ node.actor.imgUrl }}"/>
+		<p class="jobs" >{{ node.actor.jobs }}</p>
+	</div>
 </div>
 

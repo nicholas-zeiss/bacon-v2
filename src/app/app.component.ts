@@ -1,6 +1,6 @@
 
 
-import { Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { BaconPathService } from './core/bacon-path.service';
 import { DispatchService } from './core/dispatch.service';
@@ -30,33 +30,19 @@ const VIEW_COMPONENTS = {
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-	@ViewChild('appView', { read: ViewContainerRef }) appView: ViewContainerRef;
-
+	private viewComponent: any;
 
 	constructor(
 		private baconPath: BaconPathService,
-		private componentFactoryResolver: ComponentFactoryResolver,
 		private dispatch: DispatchService,
 		private state: StateService
 	) { }
 
 
 	ngOnInit() {
-		this.state
-			.getView()
-			.subscribe((nextView: View) => {
-				this.loadView(nextView);
-			});
-	}
-
-
-	loadView(view: View) {
-		const component = VIEW_COMPONENTS[view];
-		const loader = this.componentFactoryResolver
-			.resolveComponentFactory(component);
-
-		this.appView.clear();
-		this.appView.createComponent(loader);
+		this.state.getView().subscribe((nextView: View) => {
+			this.viewComponent = VIEW_COMPONENTS[nextView];
+		});
 	}
 
 

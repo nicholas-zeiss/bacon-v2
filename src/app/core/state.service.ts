@@ -22,7 +22,9 @@ export class StateService {
 
 	constructor() {
 		this.store.actions
-			.scan((state: AppState, action: Action) => action(state), INITIAL_STATE)
+			.scan((state: AppState, action: Action) => (
+				action(state)
+			), INITIAL_STATE)
 			.distinctUntilChanged(deepEquals)
 			.subscribe(state => this.store.states.next(state));
 	}

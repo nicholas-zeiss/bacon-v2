@@ -1,11 +1,12 @@
 
 
 <div id="app">
-	<app-input (search)="search($event)"></app-input>
+	<app-input (search)="search($event)" [style.z-index]="1"></app-input>
 
 	<section class="view">
-		<ng-template #appView></ng-template>
+		<ng-container *ngComponentOutlet="viewComponent"></ng-container>
 	</section>
+
 
 	<section class="footer">
 		<div>

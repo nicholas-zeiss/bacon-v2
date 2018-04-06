@@ -11,7 +11,6 @@ import { StateService } from './state.service';
 import { Actor, ChoiceStore, NconstStore } from '../shared/actor';
 import { BaconPath, BaconPathStore, isBaconPath } from '../shared/bacon-path';
 import { SearchError } from '../shared/search-error';
-import { View } from '../shared/view';
 import { deepEquals } from '../shared/utils';
 
 
@@ -60,24 +59,25 @@ export class BaconPathService {
 	searchNconst(nconst: number) {
 		if (this.storedBaconPaths.has(nconst)) {
 			const path = this.storedBaconPaths.get(nconst);
-			this.dispatch.setCurrBaconPath(path);
-			this.dispatch.setViewDisplay();
+			this.displayBaconPath(path);
 			return;
 		}
 
 		this.dispatch.setSearchName(`index: ${nconst}`);
 		this.dispatch.setViewLoading();
-		this.serverCalls.searchNconst(nconst)
+		this.serverCalls
+			.searchNconst(nconst)
 			.subscribe(this.handleSuccess, this.handleError);
 	}
 
 
 	handleSuccess = (res: Actor[] | BaconPath) => {
 		if (isBaconPath(res)) {
-			res.forEach(({ actor, movie }) => actor.imgUrl = actor.imgUrl || '/assets/no-image.png');
+			res.forEach(({ actor, movie }) => (
+				actor.imgUrl = actor.imgUrl || '/assets/no-image.png'
+			));
 			this.dispatch.addBaconPathToStore(res);
 			this.displayBaconPath(res);
-
 		} else {
 			this.dispatch.addActorChoiceToStore(res);
 			this.displayActorChoice(res);

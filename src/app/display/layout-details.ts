@@ -5,40 +5,49 @@ import { Actor } from '../shared/actor';
 import { Movie } from '../shared/movie';
 
 
-export interface DetailNode {
+export abstract class DetailNode {
 	classNames: string[];
-	hidden: boolean;
+	rowIndex: number;
+	visibility: 'firstHiddenActor' | 'firstHiddenMovie' | 'firstHiddenMovieShort' | 'hidden' | 'visible';
 	type: NodeTypes;
+
+	show() {
+		this.visibility = 'visible';
+	}
 }
 
 
-export class ActorNode implements DetailNode {
-	classNames = ['actor-containter'];
-	hidden = true;
+export class ActorNode extends DetailNode {
+	classNames = [];
 	type: NodeTypes = 'actor';
 
-	constructor(public actor: Actor) { }
+	constructor(public actor: Actor, public rowIndex: number) {
+		super();
+		this.visibility = rowIndex ? 'hidden' : 'firstHiddenActor';
+	}
 }
 
 
-export class MovieNode implements DetailNode {
+export class MovieNode extends DetailNode {
 	arrowDetails: ArrowDetails;
-	classNames = ['movie-container'];
-	hidden = true;
+	classNames = ['movie-details'];
 
-	constructor (public movie: Movie, public type: NodeTypes) {
-		if (/Short/.test(type)) {
-			this.classNames.push('short');
-		}
+	constructor(public movie: Movie, public type: NodeTypes, public rowIndex: number) {
+		super();
+
+		/Short/.test(type) ? this.classNames.push('short') : null;
+		/down|Center/.test(type) ? this.classNames.push('arrow-row') : null;	// or see if rowIndex odd
+		type === 'downOnRight' ? this.classNames.push('float-right') : null;
 
 		this.arrowDetails = getArrowDetails(type);
+		this.visibility = !rowIndex ? /Short/.test(type) ? 'firstHiddenMovieShort' : 'firstHiddenMovie' : 'hidden';
 	}
 }
 
 
 export class NodeRow {
 	classNames: string[] = ['row'];
-	hidden = true;
+	visibility: 'hidden' | 'visible' = 'hidden';
 	nodes: DetailNode[] = [];
 
 	constructor(index: number) {
