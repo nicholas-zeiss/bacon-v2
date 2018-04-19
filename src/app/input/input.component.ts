@@ -14,8 +14,8 @@ import { StateService } from '../core/state.service';
 })
 export class InputComponent {
 	@Output() search = new EventEmitter<string>();
-	private inputDisabled: boolean;
-	private searchForm = new FormGroup({
+	inputDisabled: boolean;
+	searchForm = new FormGroup({
 		name: new FormControl('', Validators.required)
 	});
 

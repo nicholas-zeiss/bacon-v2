@@ -24,6 +24,11 @@ app.get('*', (req, res) => {
 });
 
 
+app.get('/smoothscroll', (req, res) => {
+	res.sendFile('../src/assets/smoothscroll.js');
+});
+
+
 // Helper for /name and /nconst post requests
 function sendBaconPath(actor, res) {
 	db.getBaconPath(actor)
@@ -75,18 +80,16 @@ app.post('/api/name', (req, res) => {
 
 	db.getActorsByName(req.body.name)
 		.then((actors) => {
-			setTimeout(() => {
-				if (!actors.length) {
-					res.sendStatus(404);
-				} else if (actors.length === 1) {
-					sendBaconPath(actors[0], res);
-				} else {
-					res.status(300).json(actors.map((actor) => {
-						delete actor.parents;
-						return actor;
-					}));
-				}
-			}, 1000);
+			if (!actors.length) {
+				res.sendStatus(404);
+			} else if (actors.length === 1) {
+				sendBaconPath(actors[0], res);
+			} else {
+				res.status(300).json(actors.map((actor) => {
+					delete actor.parents;
+					return actor;
+				}));
+			}
 		})
 		.catch(() => res.sendStatus(500));
 });
@@ -102,13 +105,11 @@ app.post('/api/nconst', (req, res) => {
 
 	db.getActorsByNconsts([req.body.nconst])
 		.then((actors) => {
-			setTimeout(() => {
-				if (!actors.length) {
-					res.sendStatus(404);
-				} else {
-					sendBaconPath(actors[0], res);
-				}
-			}, 1000);
+			if (!actors.length) {
+				res.sendStatus(404);
+			} else {
+				sendBaconPath(actors[0], res);
+			}
 		})
 		.catch(() => res.sendStatus(500));
 });

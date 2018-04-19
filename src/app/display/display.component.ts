@@ -1,12 +1,12 @@
 
 
-import { Component, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy } from '@angular/core';
 import { trigger, state, keyframes, style, animate, transition } from '@angular/animations';
 
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/first';
 
-import { ActorNode, DetailNode, getNodeTypes, MovieNode, NodeRow } from './layout-details';
+import { ActorNode, getNodeTypes, MovieNode, NodeRow } from './layout-details';
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
 import { Actor, isActor } from '../shared/actor';
@@ -23,50 +23,52 @@ const getRowIndex = (pathIndex) => (
 
 
 @Component({
-	animations: [
-		trigger('detailNode', [
-			state('firstHiddenActor', style({ display: 'none' })),
-			state('firstHiddenMovie', style({ display: 'none' })),
-			state('firstHiddenMovieShort', style({ display: 'none' })),
-			state('hidden', style({ visibility: 'hidden' })),
-			state('visible', style({ visibility: 'visible' })),
-			transition('firstHiddenActor => visible', [
-				animate(1000, keyframes([
-					style({ opacity: 0, width: '0rem', offset:  0}),
-					style({ opacity: 0, width: '10.5rem', offset:  .5}),
-					style({ opacity: 1, width: '10.5rem', offset: 1 })
-				]))
-			]),
-			transition('firstHiddenMovie => visible', [
-				animate(1000, keyframes([
-					style({ opacity: 0, width: '0rem', offset: 0 }),
-					style({ opacity: 0, width: '15.5rem', offset: .5 }),
-					style({ opacity: 1, width: '15.5rem', offset: 1 })
-				]))
-			]),
-			transition('firstHiddenMovieShort => visible', [
-				animate(1000, keyframes([
-					style({ opacity: 0, width: '0rem', offset: 0 }),
-					style({ opacity: 0, width: '8.5rem', offset: .5 }),
-					style({ opacity: 1, width: '8.5rem', offset: 1 })
-				]))
-			]),
-			transition('hidden => visible', [
-				animate(1000, keyframes([
-					style({ visibility: 'visible', opacity: 0 }),
-					style({ visibility: 'visible', opacity: 5 })
-				]))
-			])
-		]),
-	],
+	// animations: [
+	// 	trigger('detailNode', [
+	// 		state('firstHiddenActor', style({ display: 'none' })),
+	// 		state('firstHiddenMovie', style({ display: 'none' })),
+	// 		state('firstHiddenMovieShort', style({ display: 'none' })),
+	// 		state('hidden', style({ visibility: 'hidden' })),
+	// 		state('visible', style({ visibility: 'visible' })),
+	// 		transition('firstHiddenActor => visible', [
+	// 			animate(1000, keyframes([
+	// 				style({ opacity: 0, width: '0rem', offset:  0}),
+	// 				style({ opacity: 0, width: '10.5rem', offset:  .5}),
+	// 				style({ opacity: 1, width: '10.5rem', offset: 1 })
+	// 			]))
+	// 		]),
+	// 		transition('firstHiddenMovie => visible', [
+	// 			animate(1000, keyframes([
+	// 				style({ opacity: 0, width: '0rem', offset: 0 }),
+	// 				style({ opacity: 0, width: '15.5rem', offset: .5 }),
+	// 				style({ opacity: 1, width: '15.5rem', offset: 1 })
+	// 			]))
+	// 		]),
+	// 		transition('firstHiddenMovieShort => visible', [
+	// 			animate(1000, keyframes([
+	// 				style({ opacity: 0, width: '0rem', offset: 0 }),
+	// 				style({ opacity: 0, width: '8.5rem', offset: .5 }),
+	// 				style({ opacity: 1, width: '8.5rem', offset: 1 })
+	// 			]))
+	// 		]),
+	// 		transition('hidden => visible', [
+	// 			animate(1000, keyframes([
+	// 				style({ visibility: 'visible', opacity: 0 }),
+	// 				style({ visibility: 'visible', opacity: 5 })
+	// 			]))
+	// 		])
+	// 	]),
+	// ],
 	selector: 'app-display',
 	templateUrl: './display.component.html',
 	styleUrls: ['./display.component.css']
 })
 export class DisplayComponent implements OnDestroy {
-	private name: string;
-	private nodeRows: NodeRow[] = [];
-	private subscription: Subscription;
+	name: string;
+	nodeRows: NodeRow[] = [];
+	rowAddedEmitter = new EventEmitter<number>();
+	scrollLock = true;
+	subscription: Subscription;
 
 	constructor(
 		private appState: StateService,
@@ -106,10 +108,18 @@ export class DisplayComponent implements OnDestroy {
 				// TODO: CLEAR THESE ON DESTROY
 				flattened.forEach((node, i) => {
 					const row = this.nodeRows[getRowIndex(i)];
+					row.show();
+
 					setTimeout(() => {
-						row.visibility = 'visible';
+						this.rowAddedEmitter.emit(getRowIndex(i));
+
+						if (i === flattened.length - 1) {
+							this.scrollLock = false;
+							this.dispatch.enableInput();
+						}
+
 						node.show();
-					}, 1000 * i);
+					}, 2000 * i);
 				});
  			});
 	}

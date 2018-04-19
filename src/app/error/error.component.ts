@@ -15,8 +15,8 @@ import { SearchError } from '../shared/search-error';
 	styleUrls: ['./error.component.css']
 })
 export class ErrorComponent implements OnDestroy {
-	private error: SearchError;
 	private subscription: Subscription;
+	error: SearchError;
 
 	constructor(
 		private dispatch: DispatchService,

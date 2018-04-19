@@ -1,10 +1,13 @@
-import { Directive } from '@angular/core';
+
+
+import { Directive, HostListener, Input } from '@angular/core';
+
 
 @Directive({
-  selector: '[appScrollLock]'
+	selector: '[appScrollLock]'
 })
 export class ScrollLockDirective {
-
-  constructor() { }
-
+	@Input() appScrollLock: boolean;
+	@HostListener('wheel') onScroll = e => !this.appScrollLock;
 }
+

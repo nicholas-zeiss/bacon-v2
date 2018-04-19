@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
 import { DisplayComponent } from './display.component';
 import { ActorDetailsComponent } from './actor-details/actor-details.component';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
-// import { ScrollLockDirective } from './directives/scroll-lock.directive';
-
+import { ScrollLockDirective } from './directives/scroll-lock.directive';
+import { AutoScrollDirective } from './directives/auto-scroll.directive';
 
 @NgModule({
 	imports: [
@@ -17,9 +17,10 @@ import { MovieDetailsComponent } from './movie-details/movie-details.component';
 	],
 	declarations: [
 		ActorDetailsComponent,
+		AutoScrollDirective,
 		DisplayComponent,
 		MovieDetailsComponent,
-		// ScrollLockDirective
+		ScrollLockDirective
 	],
 	entryComponents: [DisplayComponent]
 })

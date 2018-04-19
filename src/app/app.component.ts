@@ -30,7 +30,7 @@ const VIEW_COMPONENTS = {
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-	private viewComponent: any;
+	viewComponent: any;
 
 	constructor(
 		private baconPath: BaconPathService,

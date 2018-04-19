@@ -13,8 +13,8 @@ import { StateService } from '../core/state.service';
 	styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent implements OnDestroy {
-	private name: string;
 	private subscription: Subscription;
+	name: string;
 
 	constructor(state: StateService) {
 		this.subscription = state
