@@ -1,6 +1,6 @@
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 
 import { BaconPathService } from './core/bacon-path.service';
 import { DispatchService } from './core/dispatch.service';
@@ -30,6 +30,7 @@ const VIEW_COMPONENTS = {
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+	homeToggle: EventEmitter<boolean>;
 	viewComponent: any;
 
 	constructor(
@@ -43,12 +44,20 @@ export class AppComponent implements OnInit {
 		this.state.getView().subscribe((nextView: View) => {
 			this.viewComponent = VIEW_COMPONENTS[nextView];
 		});
+
+		this.state.getHomeToggle().subscribe(toggler => {
+			this.homeToggle = toggler;
+		});
 	}
 
 
 	search(name: string) {
-		this.dispatch.disableInput();
-		this.baconPath.searchName(name);
+		if (/^\s*kevin\s+bacon\s*$/i.test(name)) {
+			this.homeToggle.emit(true);
+		} else {
+			this.dispatch.disableInput();
+			this.baconPath.searchName(name);
+		}
 	}
 }
 

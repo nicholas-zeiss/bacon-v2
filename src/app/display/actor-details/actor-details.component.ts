@@ -44,7 +44,7 @@ export class ActorDetailsComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.bSrc = this.sanitizer.bypassSecurityTrustStyle(`url('${this.node.actor.imgUrl}')`);
+		this.bSrc = this.sanitizer.bypassSecurityTrustStyle(`url('${this.node.actor.imgUrl}')`) as string;
 	}
 }
 

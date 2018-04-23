@@ -1,8 +1,9 @@
 
 
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
+
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/pluck';
@@ -39,6 +40,10 @@ export class StateService {
 		this.store.states.pluck('currBaconPath')
 	)
 
+
+	getHomeToggle = (): Observable<EventEmitter<boolean>> => (
+		this.store.states.pluck('homeToggle')
+	)
 
 	getInputDisabled = (): Observable<boolean> => (
 		this.store.states.pluck('inputDisabled')

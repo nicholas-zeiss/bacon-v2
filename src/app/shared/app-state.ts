@@ -1,5 +1,6 @@
 
 
+import { EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -13,6 +14,7 @@ export interface AppState {
 	currActorChoice: Actor[];
 	inputDisabled: boolean;
 	currBaconPath: BaconPath;
+	homeToggle: Subject<boolean>;
 	searchError: SearchError;
 	searchName: string;
 	storedActors: NconstStore;
@@ -26,6 +28,7 @@ export interface AppStateUpdate {
 	currActorChoice?: Actor[];
 	inputDisabled?: boolean;
 	currBaconPath?: BaconPath;
+	homeToggle?: Subject<boolean>;
 	searchError?: SearchError;
 	searchName?: string;
 	storedActors?: NconstStore;
@@ -39,6 +42,7 @@ export const INITIAL_STATE = {
 	currActorChoice: null,
 	inputDisabled: false,
 	currBaconPath: null,
+	homeToggle: new EventEmitter<boolean>(),
 	searchError: null,
 	searchName: null,
 	storedActors: new Map<string, Set<number>>(),

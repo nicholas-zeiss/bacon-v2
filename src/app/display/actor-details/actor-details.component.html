@@ -1,6 +1,6 @@
 
 
-<div class="actor-details" [@visibility]="getAnimationState()" (@visibility.start)="log($event)">
+<div class="actor-details" [@visibility]="getAnimationState()">
 	<h2>{{ node.actor.name }}</h2>
 	<p class="dob">{{ node.actor.birthDeath }}</p>
 	<div>
