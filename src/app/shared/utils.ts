@@ -56,6 +56,10 @@ export function deepEquals(a, b): boolean {
 			return false;
 		}
 
+		if (a instanceof HTMLElement || b instanceof HTMLElement) {
+			return a === b;
+		}
+
 		if (a instanceof Map || a instanceof Set) {
 			return mapSetEquals(a, b);
 

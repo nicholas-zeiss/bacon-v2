@@ -3,6 +3,7 @@
 export interface Actor {
 	_id: number;
 	birthDeath: string;
+	img?: any;
 	imgUrl: string;
 	imgInfo: string;
 	jobs: string;

@@ -1,6 +1,6 @@
 
 
-import { NodeTypes } from '../layout-details';
+import { NodeType } from '../layout-details';
 
 
 interface Point {
@@ -21,6 +21,7 @@ export interface ArrowDetails {
 	height: number;
 	lineEnd: Point;
 	lineStart: Point;
+	styles: { [index: string]: string };
 	tipPoints: string;
 	title: Text;
 	width: number;
@@ -28,7 +29,7 @@ export interface ArrowDetails {
 }
 
 
-export function getArrowDetails(type: NodeTypes): ArrowDetails {
+export function getArrowDetails(type: NodeType): ArrowDetails {
 	const out = {} as ArrowDetails;
 
 	switch (type) {
@@ -39,7 +40,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 5, y: 152 },
 				lineEnd: { x: 236, y: 152 },
 				year: { x: 108, y: 140, anchor: 'middle' },
-				title: { x: 0, y: 160, width: 212, height: 144, align: 'center' }
+				title: { x: 0, y: 160, width: 212, height: 144, align: 'center' },
+				styles: {}
 			});
 
 			break;
@@ -51,7 +53,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 243, y: 152 },
 				lineEnd: { x: 12, y: 152 },
 				year: { x: 140, y: 140, anchor: 'middle' },
-				title: { x: 32, y: 160, width: 212, height: 144, align: 'center' }
+				title: { x: 32, y: 160, width: 212, height: 144, align: 'center' },
+				styles: {}
 			});
 
 			break;
@@ -63,7 +66,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 88, y: 5 },
 				lineEnd: { x: 88, y: 228 },
 				year: { x: 100, y: 100, anchor: 'start' },
-				title: { x: 100, y: 110, width: 400, height: 120, align: 'left' }
+				title: { x: 100, y: 110, width: 400, height: 120, align: 'left' },
+				styles: {}
 			});
 
 			break;
@@ -75,7 +79,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 512, y: 5 },
 				lineEnd: { x: 512, y: 228 },
 				year: { x: 500, y: 100, anchor: 'end' },
-				title: { x: 100, y: 110, width: 400, height: 120, align: 'right' }
+				title: { x: 100, y: 110, width: 400, height: 120, align: 'right' },
+				styles: { 'padding-left': '200px' }
 			});
 
 			break;
@@ -87,7 +92,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 176, y: 5 },
 				lineEnd: { x: 275, y: 228 },
 				year: { x: 180, y: 90, anchor: 'middle' },
-				title: { x: 60, y: 100, width: 150, height: 140, align: 'right' }
+				title: { x: 60, y: 100, width: 150, height: 140, align: 'right' },
+				styles: {}
 			});
 
 			break;
@@ -99,7 +105,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 424, y: 5 },
 				lineEnd: { x: 325, y: 228 },
 				year: { x: 420, y: 90, anchor: 'middle' },
-				title: { x: 395, y: 100, width: 150, height: 140, align: 'left' }
+				title: { x: 395, y: 100, width: 150, height: 140, align: 'left' },
+				styles: {}
 			});
 
 			break;
@@ -111,7 +118,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 131, y: 152 },
 				lineEnd: { x: 12, y: 152 },
 				year: { x: 84, y: 140, anchor: 'middle' },
-				title: { x: 32, y: 160, width: 100, height: 144, align: 'center' }
+				title: { x: 32, y: 160, width: 100, height: 144, align: 'center' },
+				styles: {}
 			});
 
 			break;
@@ -123,7 +131,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 5, y: 152 },
 				lineEnd: { x: 124, y: 152 },
 				year: { x: 52, y: 140, anchor: 'middle' },
-				title: { x: 0, y: 160, width: 100, height: 144, align: 'center' }
+				title: { x: 0, y: 160, width: 100, height: 144, align: 'center' },
+				styles: {}
 			});
 
 			break;
@@ -135,7 +144,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 176, y: 5 },
 				lineEnd: { x: 325, y: 228 },
 				year: { x: 190, y: 80, anchor: 'middle' },
-				title: { x: 0, y: 90, width: 225, height: 140, align: 'right' }
+				title: { x: 0, y: 90, width: 225, height: 140, align: 'right' },
+				styles: {}
 			});
 
 			break;
@@ -147,7 +157,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 675, y: 5 },
 				lineEnd: { x: 575, y: 228 },
 				year: { x: 675, y: 80, anchor: 'middle' },
-				title: { x: 650, y: 90, width: 150, height: 150, align: 'left' }
+				title: { x: 650, y: 90, width: 150, height: 150, align: 'left' },
+				styles: {}
 			});
 
 			break;
@@ -159,7 +170,8 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 				lineStart: { x: 624, y: 5 },
 				lineEnd: { x: 475, y: 228 },
 				year: { x: 610, y: 80, anchor: 'middle' },
-				title: { x: 575, y: 90, width: 225, height: 140, align: 'left' }
+				title: { x: 575, y: 90, width: 225, height: 140, align: 'left' },
+				styles: {}
 			});
 
 			break;
@@ -175,6 +187,7 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 	const theta = Math.atan(height / width);
 	const sign = width >= 0 ? 1 : -1;
 
+	out.styles['box-sizing'] = 'border-box';
 
 	// uses some trig to calc the coordinates of points in the arrow tip depending
 	// on the direction of the arrow

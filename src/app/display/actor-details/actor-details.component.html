@@ -1,11 +1,10 @@
 
 
-<div class="actor-details">
+<div class="actor-details" [@visibility]="getAnimationState()" (@visibility.start)="log($event)">
 	<h2>{{ node.actor.name }}</h2>
 	<p class="dob">{{ node.actor.birthDeath }}</p>
 	<div>
-		<a href="{{ node.actor.imgInfo }}" target="_blank" *ngIf="node.actor.imgInfo">
-			<img alt="{{ node.actor.name }}" title="{{ node.actor.name }}" src="{{ node.actor.imgUrl }}"/>
+		<a href="{{ node.actor.imgInfo }}" target="_blank" *ngIf="node.actor.imgInfo" [style.background-image]="bSrc">
 		</a>
 		<img alt="{{ node.actor.name }}" title="{{ node.actor.name }}" *ngIf="!node.actor.imgInfo" src="{{ node.actor.imgUrl }}"/>
 		<p class="jobs" >{{ node.actor.jobs }}</p>
