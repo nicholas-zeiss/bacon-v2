@@ -8,9 +8,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-import { Actor } from '../shared/actor';
-import { BaconPath, BaconPathNode } from '../shared/bacon-path';
-import { SearchError } from '../shared/search-error';
+import { Actor, BaconPath, BaconPathNode, SearchError } from '../shared/models';
 
 
 @Injectable()

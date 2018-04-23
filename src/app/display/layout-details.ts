@@ -1,8 +1,7 @@
 
 
 import { ArrowDetails, getArrowDetails } from './movie-details/arrow-details';
-import { Actor } from '../shared/actor';
-import { Movie } from '../shared/movie';
+import { Actor, Movie } from '../shared/models';
 
 
 export interface DetailNode {

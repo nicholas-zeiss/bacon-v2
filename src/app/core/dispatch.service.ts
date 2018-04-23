@@ -4,11 +4,17 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
 
-import { Actor, ChoiceStore, NconstStore } from '../shared/actor';
+import {
+	Actor,
+	ChoiceStore,
+	NconstStore,
+	BaconPath,
+	BaconPathStore,
+	SearchError,
+	View
+} from '../shared/models';
+
 import { Action, AppState, AppStore, AppStateUpdate, STORE } from '../shared/app-state';
-import { BaconPath, BaconPathStore } from '../shared/bacon-path';
-import { SearchError } from '../shared/search-error';
-import { View } from '../shared/view';
 
 
 @Injectable()

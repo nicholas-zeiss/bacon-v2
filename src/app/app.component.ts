@@ -1,6 +1,6 @@
 
 
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Type } from '@angular/core';
 
 import { BaconPathService } from './core/bacon-path.service';
 import { DispatchService } from './core/dispatch.service';
@@ -12,15 +12,15 @@ import { ErrorComponent } from './error/error.component';
 import { HomeComponent } from './home/home.component';
 import { LoadingComponent } from './loading/loading.component';
 
-import { View } from './shared/view';
+import { BaconPath, View } from './shared/models';
 
 
-const VIEW_COMPONENTS = {
-	[View.Choice]: ChoiceComponent,
-	[View.Display]: DisplayComponent,
-	[View.Error]: ErrorComponent,
-	[View.Home]: HomeComponent,
-	[View.Loading]: LoadingComponent
+const VIEW_COMPONENT = {
+	[View.Choice]: ChoiceComponent as Type<any>,
+	[View.Display]: DisplayComponent as Type<any>,
+	[View.Error]: ErrorComponent as Type<any>,
+	[View.Home]: HomeComponent as Type<any>,
+	[View.Loading]: LoadingComponent as Type<any>
 };
 
 
@@ -32,7 +32,7 @@ const VIEW_COMPONENTS = {
 export class AppComponent implements OnInit {
 	homeToggle: EventEmitter<boolean>;
 	currDisplayActor: string = null;
-	viewComponent: any;
+	viewComponent: Type<any>;
 
 	constructor(
 		private baconPath: BaconPathService,
@@ -41,22 +41,18 @@ export class AppComponent implements OnInit {
 	) { }
 
 
-	ngOnInit() {
+	ngOnInit(): void {
 		this.state.getView().subscribe((nextView: View) => {
-			this.viewComponent = VIEW_COMPONENTS[nextView];
+			this.viewComponent = VIEW_COMPONENT[nextView];
 		});
 
-		this.state.getCurrBaconPath().subscribe((path) => {
-			if (path) {
-				this.currDisplayActor = this.formatStr(path[0].actor.name);
-			} else {
-				this.currDisplayActor = null;
-			}
-		});
+		this.state.getCurrBaconPath().subscribe((path: BaconPath) => (
+			this.currDisplayActor = path ? this.formatStr(path[0].actor.name) : null
+		));
 
-		this.state.getHomeToggle().subscribe(toggler => {
-			this.homeToggle = toggler;
-		});
+		this.state.getHomeToggle().subscribe((toggler: EventEmitter<boolean>) => (
+			this.homeToggle = toggler
+		));
 	}
 
 
@@ -65,7 +61,7 @@ export class AppComponent implements OnInit {
 	}
 
 
-	search(name: string) {
+	search(name: string): void {
 		if (/^\s*kevin\s+bacon\s*$/i.test(name)) {
 			this.homeToggle.emit(true);
 		} else if (this.currDisplayActor !== this.formatStr(name)) {

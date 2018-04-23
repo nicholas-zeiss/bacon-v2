@@ -4,10 +4,15 @@ import { EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { Actor, ChoiceStore, NconstStore } from './actor';
-import { BaconPath, BaconPathStore } from './bacon-path';
-import { SearchError } from './search-error';
-import { View } from './view';
+import {
+	Actor,
+	ChoiceStore,
+	NconstStore,
+	BaconPath,
+	BaconPathStore,
+	SearchError,
+	View
+} from './models';
 
 
 export interface AppState {

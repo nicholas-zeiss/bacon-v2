@@ -7,11 +7,11 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/first';
 
 import { getNodeTypes, NodeRow, NodeType } from './layout-details';
+
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { Actor, isActor } from '../shared/actor';
-import { BaconPath, BaconPathNode } from '../shared/bacon-path';
-import { Movie } from '../shared/movie';
+
+import { Actor, BaconPath, BaconPathNode, Movie } from '../shared/models';
 import { deepEquals } from '../shared/utils';
 
 

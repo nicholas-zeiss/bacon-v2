@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { SearchError } from '../shared/search-error';
+import { SearchError } from '../shared/models';
 
 
 @Component({

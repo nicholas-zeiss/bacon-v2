@@ -9,11 +9,17 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/scan';
 
-import { Actor, ChoiceStore, NconstStore } from '../shared/actor';
+import {
+	Actor,
+	ChoiceStore,
+	NconstStore,
+	BaconPath,
+	BaconPathStore,
+	SearchError,
+	View
+} from '../shared/models';
+
 import { Action, AppState, AppStore, INITIAL_STATE, STORE } from '../shared/app-state';
-import { BaconPath, BaconPathStore } from '../shared/bacon-path';
-import { SearchError } from '../shared/search-error';
-import { View } from '../shared/view';
 import { deepEquals } from '../shared/utils';
 
 

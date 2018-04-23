@@ -1,8 +1,5 @@
 
 
-import { EventEmitter } from '@angular/core';
-
-
 type MapSet = Map<any, any> | Set<any>;
 
 
@@ -13,7 +10,7 @@ function mapSetEquals(a: MapSet, b: MapSet): boolean {
 
 	let equal = true;
 
-	(<Map<any, any>>a).forEach((v, k) => {
+	(a as Map<any, any>).forEach((v, k) => {
 		if (a instanceof Map) {
 			equal = equal && deepEquals(v, (b as Map<any, any>).get(k));
 		} else {
@@ -55,16 +52,12 @@ export function deepEquals(a, b): boolean {
 			return a === b;
 		}
 
+		if (a === b) {
+			return true;
+		}
+
 		if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) {
 			return false;
-		}
-
-		if (a instanceof EventEmitter || b instanceof EventEmitter) {
-			return a === b;
-		}
-
-		if (a instanceof HTMLElement || b instanceof HTMLElement) {
-			return a === b;
 		}
 
 		if (a instanceof Map || a instanceof Set) {

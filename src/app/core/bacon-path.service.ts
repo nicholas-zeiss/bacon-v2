@@ -8,9 +8,15 @@ import { DispatchService } from './dispatch.service';
 import { ServerCallsService } from './server-calls.service';
 import { StateService } from './state.service';
 
-import { Actor, ChoiceStore, NconstStore } from '../shared/actor';
-import { BaconPath, BaconPathStore, isBaconPath } from '../shared/bacon-path';
-import { SearchError } from '../shared/search-error';
+import {
+	Actor,
+	ChoiceStore,
+	NconstStore,
+	BaconPath,
+	BaconPathStore,
+	SearchError
+} from '../shared/models';
+
 import { deepEquals } from '../shared/utils';
 
 
@@ -72,13 +78,19 @@ export class BaconPathService {
 
 
 	handleSuccess = (res: Actor[] | BaconPath) => {
-		if (isBaconPath(res)) {
+		if ((res as BaconPath)[0].movie !== undefined) {
+			res = res as BaconPath;
+
 			res.forEach(({ actor, movie }) => (
 				actor.imgUrl = actor.imgUrl || '/assets/no-image.png'
 			));
+
 			this.dispatch.addBaconPathToStore(res);
 			this.displayBaconPath(res);
+
 		} else {
+			res = res as Actor[];
+
 			this.dispatch.addActorChoiceToStore(res);
 			this.displayActorChoice(res);
 		}

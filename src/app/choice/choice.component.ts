@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { BaconPathService } from '../core/bacon-path.service';
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { Actor } from '../shared/actor';
+import { Actor } from '../shared/models';
 
 
 @Component({
