@@ -31,6 +31,7 @@ const VIEW_COMPONENTS = {
 })
 export class AppComponent implements OnInit {
 	homeToggle: EventEmitter<boolean>;
+	currDisplayActor: string = null;
 	viewComponent: any;
 
 	constructor(
@@ -45,16 +46,29 @@ export class AppComponent implements OnInit {
 			this.viewComponent = VIEW_COMPONENTS[nextView];
 		});
 
+		this.state.getCurrBaconPath().subscribe((path) => {
+			if (path) {
+				this.currDisplayActor = this.formatStr(path[0].actor.name);
+			} else {
+				this.currDisplayActor = null;
+			}
+		});
+
 		this.state.getHomeToggle().subscribe(toggler => {
 			this.homeToggle = toggler;
 		});
 	}
 
 
+	formatStr(str: string): string {
+		return str.trim().toLowerCase().replace(/\s+/, ' ');
+	}
+
+
 	search(name: string) {
 		if (/^\s*kevin\s+bacon\s*$/i.test(name)) {
 			this.homeToggle.emit(true);
-		} else {
+		} else if (this.currDisplayActor !== this.formatStr(name)) {
 			this.dispatch.disableInput();
 			this.baconPath.searchName(name);
 		}

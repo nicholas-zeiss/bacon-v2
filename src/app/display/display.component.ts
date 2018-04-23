@@ -3,6 +3,7 @@
 import { Component, EventEmitter, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/first';
 
 import { getNodeTypes, NodeRow, NodeType } from './layout-details';
@@ -11,6 +12,7 @@ import { StateService } from '../core/state.service';
 import { Actor, isActor } from '../shared/actor';
 import { BaconPath, BaconPathNode } from '../shared/bacon-path';
 import { Movie } from '../shared/movie';
+import { deepEquals } from '../shared/utils';
 
 
 // TODO: MAKE RESPONSIVE
@@ -39,13 +41,16 @@ export class DisplayComponent implements OnDestroy {
 	) {
 		this.subscription = appState
 			.getCurrBaconPath()
-			.first()
+			.distinctUntilChanged(deepEquals)
 			.subscribe(path => {
 				if (!path) {
 					return;
 				}
 
 				this.name = path[0].actor.name;
+				this.nodeRows = [];
+				this.scrollLock = true;
+
 
 				const nodeTypes = getNodeTypes(path.length * 2 - 1);
 
