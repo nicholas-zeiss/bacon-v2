@@ -114,8 +114,6 @@ export class DisplayComponent implements OnDestroy {
 
 	reset() {
 		this.dispatch.setViewHome();
-		this.dispatch.enableInput();
-		this.dispatch.setCurrBaconPath(null);
 	}
 
 

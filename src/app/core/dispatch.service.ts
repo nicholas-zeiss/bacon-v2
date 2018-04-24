@@ -9,6 +9,19 @@ import { Actor, BaconPath, DataStore, SearchError, View } from '../shared/models
 import { copyModel, isBaconPath, plainString } from '../shared/utils';
 
 
+const DEFAULT_STATE = {
+	currActorChoice: null,
+	currBaconPath: null,
+	inputDisabled: false,
+	searchError: null,
+	searchName: null
+};
+
+const expandDefault = (update: AppStateUpdate): AppStateUpdate => (
+	Object.assign({}, DEFAULT_STATE, update)
+);
+
+
 @Injectable()
 export class DispatchService {
 	private actions: Subject<Action> = STORE.actions;
@@ -61,47 +74,41 @@ export class DispatchService {
 
 
 	setCurrActorChoice(choice: Actor[]): void {
-		this.sendAction({ currActorChoice: copyModel(choice) });
+		this.sendAction(expandDefault({
+			currActorChoice: copyModel(choice),
+			inputDisabled: true,
+			view: View.Choice
+		}));
 	}
 
 
 	setCurrBaconPath(path: BaconPath): void {
-		this.sendAction({ currBaconPath: copyModel(path) });
+		this.sendAction(expandDefault({
+			currBaconPath: copyModel(path),
+			inputDisabled: true,
+			view: View.Display
+		}));
 	}
 
-
-	setViewChoice(): void {
-		this.sendAction({ view: View.Choice });
-	}
-
-
-	setViewDisplay(): void {
-		this.sendAction({ view: View.Display });
-	}
-
-
-	setViewError(): void {
-		this.sendAction({ view: View.Error });
+	setSearchError(err: SearchError): void {
+		this.sendAction(expandDefault({
+			searchError: copyModel(err),
+			view: View.Error
+		}));
 	}
 
 
 	setViewHome(): void {
-		this.sendAction({ view: View.Home });
+		this.sendAction(expandDefault({ view: View.Home }));
 	}
 
 
-	setViewLoading(): void {
-		this.sendAction({ view: View.Loading });
-	}
-
-
-	setSearchError(err: SearchError) {
-		this.sendAction({ searchError: copyModel(err) });
-	}
-
-
-	setSearchName(searchName: string): void {
-		this.sendAction({ searchName });
+	setViewLoading(name: string): void {
+		this.sendAction({
+			inputDisabled: true,
+			searchName: name,
+			view: View.Loading
+		});
 	}
 }
 

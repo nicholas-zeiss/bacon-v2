@@ -31,8 +31,8 @@ const VIEW_COMPONENT = {
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-	homeToggle: EventEmitter<boolean>;
 	currDisplayActor: string = null;
+	homeToggle: EventEmitter<boolean>;
 	viewComponent: Type<any>;
 
 	constructor(
@@ -63,10 +63,14 @@ export class AppComponent implements OnInit {
 		if (name === 'kevin bacon') {
 			this.homeToggle.emit(true);
 		} else if (this.currDisplayActor !== name) {
-			this.dispatch.disableInput();
-			this.baconPath.searchName(name);
+			const storedChoice = this.baconPath.getStoredActorChoice(name);
+
+			if (storedChoice) {
+				this.baconPath.displayActorChoice(storedChoice);
+			}
 		}
-		// TODO - check if search name is currActor but that actor has choices
+
+		this.baconPath.searchName(name);
 	}
 }
 

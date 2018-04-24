@@ -31,14 +31,11 @@ export class ChoiceComponent implements OnDestroy {
 
 
 	reset() {
-		this.dispatch.enableInput();
-		this.dispatch.setCurrActorChoice(null);
 		this.dispatch.setViewHome();
 	}
 
 
 	chooseActor(actor: Actor) {
-		this.dispatch.setCurrActorChoice(null);
 		this.baconPath.searchNconst(actor._id);
 	}
 

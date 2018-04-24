@@ -27,6 +27,12 @@ export class BaconPathService {
 	}
 
 
+	getStoredActorChoice(name: string): Actor[] {
+		name = plainString(name);
+		return this.pastData.storedActorChoices.get(name) || null;
+	}
+
+
 	searchName(origName: string): void {
 		const name = plainString(origName);
 		const pastNconsts = this.pastData.storedNconsts.get(name);
@@ -45,8 +51,7 @@ export class BaconPathService {
 				.searchName(name)
 				.subscribe(this.handleSuccess, this.handleError);
 
-			this.dispatch.setSearchName(origName);
-			this.dispatch.setViewLoading();
+			this.dispatch.setViewLoading(origName);
 		}
 	}
 
@@ -61,8 +66,7 @@ export class BaconPathService {
 				.searchNconst(nconst)
 				.subscribe(this.handleSuccess, this.handleError);
 
-			this.dispatch.setSearchName(`index: ${nconst}`);
-			this.dispatch.setViewLoading();
+			this.dispatch.setViewLoading(`index: ${nconst}`);
 		}
 	}
 
@@ -80,21 +84,17 @@ export class BaconPathService {
 
 
 	handleError = (err: SearchError): void => {
-		this.dispatch.enableInput();
 		this.dispatch.setSearchError(err);
-		this.dispatch.setViewError();
 	}
 
 
 	displayActorChoice(choice: Actor[]): void {
 		this.dispatch.setCurrActorChoice(choice);
-		this.dispatch.setViewChoice();
 	}
 
 
 	displayBaconPath(path: BaconPath): void {
 		this.dispatch.setCurrBaconPath(path);
-		this.dispatch.setViewDisplay();
 	}
 }
 

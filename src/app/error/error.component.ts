@@ -29,7 +29,6 @@ export class ErrorComponent implements OnDestroy {
 
 
 	reset() {
-		this.dispatch.setSearchError(null);
 		this.dispatch.setViewHome();
 	}
 
