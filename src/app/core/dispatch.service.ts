@@ -4,100 +4,103 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
 
-import {
-	Actor,
-	ChoiceStore,
-	NconstStore,
-	BaconPath,
-	BaconPathStore,
-	SearchError,
-	View
-} from '../shared/models';
-
-import { Action, AppState, AppStore, AppStateUpdate, STORE } from '../shared/app-state';
+import { Action, AppState, AppStateUpdate, STORE } from '../shared/app-state';
+import { Actor, BaconPath, DataStore, isBaconPath, SearchError, View } from '../shared/models';
+import { copyActorChoice, copyBaconPath, plainString } from '../shared/utils';
 
 
 @Injectable()
 export class DispatchService {
 	private actions: Subject<Action> = STORE.actions;
 
-	private sendAction(obj: AppStateUpdate) {
+	private sendAction(obj: AppStateUpdate): void {
+		this.actions.next((prev: AppState) => Object.assign({}, prev, obj));
+	}
+
+	private updateStore(prevStore: DataStore, update: Actor[] | BaconPath): DataStore {
+		let name: string;
+		let nconsts: number[];
+
+		const nextStore = {
+			storedActorChoices: new Map(prevStore.storedActorChoices),
+			storedBaconPaths: new Map(prevStore.storedBaconPaths),
+			storedNconsts: new Map(prevStore.storedNconsts)
+		};
+
+		if (isBaconPath(update)) {
+			name = plainString(update[0].actor.name);
+			nconsts = [update[0].actor._id];
+			nextStore.storedBaconPaths.set(nconsts[0], update);
+		} else {
+			name = plainString(update[0].name);
+			nconsts = update.map(actor => actor._id);
+			nextStore.storedActorChoices.set(name, update);
+		}
+
+		const prevNconsts = prevStore.storedNconsts.get(name) || new Set<number>();
+		nconsts = [...Array.from(prevNconsts), ...nconsts];
+		nextStore.storedNconsts.set(name, new Set(nconsts));
+
+		return nextStore;
+	}
+
+
+	addActorChoiceToStore(actors: Actor[]): void {
 		this.actions.next((prev: AppState) => (
-			Object.assign({}, prev, obj)
+			Object.assign({}, prev, this.updateStore(prev, actors))
 		));
 	}
 
 
-	addActorChoiceToStore(actors: Actor[]) {
-		this.actions.next((prev: AppState) => {
-			const name = actors[0].name.toLowerCase();
-			const nconsts = actors.map(a => a._id);
-			const next = {
-				storedActors: new Map(prev.storedActors),
-				storedActorChoices: new Map(prev.storedActorChoices)
-			};
-
-			next.storedActors.set(name, new Set(nconsts));
-			next.storedActorChoices.set(name, actors);
-
-			return Object.assign({}, prev, next);
-		});
+	addBaconPathToStore(path: BaconPath): void {
+		this.actions.next((prev: AppState) => (
+			Object.assign({}, prev, this.updateStore(prev, path))
+		));
 	}
 
 
-	addBaconPathToStore(path: BaconPath) {
-		this.actions.next((prev: AppState) => {
-			const name = path[0].actor.name.toLowerCase();
-			const nconst = path[0].actor._id;
-
-			const next = {
-				storedActors: new Map(prev.storedActors),
-				storedBaconPaths: new Map(prev.storedBaconPaths)
-			};
-
-			const nconsts = next.storedActors.get(name) || new Set<number>();
-			nconsts.add(nconst);
-
-			next.storedActors.set(name, nconsts);
-			next.storedBaconPaths.set(nconst, path);
-
-			return Object.assign({}, prev, next);
-		});
-	}
-
-
-	setViewChoice() {
-		this.sendAction({ view: View.Choice });
-	}
-
-
-	setViewDisplay() {
-		this.sendAction({ view: View.Display });
-	}
-
-
-	setViewError() {
-		this.sendAction({ view: View.Error });
-	}
-
-
-	setViewHome() {
-		this.sendAction({ view: View.Home });
-	}
-
-
-	setViewLoading() {
-		this.sendAction({ view: View.Loading });
-	}
-
-
-	disableInput() {
+	disableInput(): void {
 		this.sendAction({ inputDisabled: true });
 	}
 
 
-	enableInput() {
+	enableInput(): void {
 		this.sendAction({ inputDisabled: false });
+	}
+
+
+	setCurrActorChoice(choice: Actor[]): void {
+		this.sendAction({ currActorChoice: choice });
+	}
+
+
+	setCurrBaconPath(path: BaconPath): void {
+		this.sendAction({ currBaconPath: path });
+	}
+
+
+	setViewChoice(): void {
+		this.sendAction({ view: View.Choice });
+	}
+
+
+	setViewDisplay(): void {
+		this.sendAction({ view: View.Display });
+	}
+
+
+	setViewError(): void {
+		this.sendAction({ view: View.Error });
+	}
+
+
+	setViewHome(): void {
+		this.sendAction({ view: View.Home });
+	}
+
+
+	setViewLoading(): void {
+		this.sendAction({ view: View.Loading });
 	}
 
 
@@ -106,18 +109,8 @@ export class DispatchService {
 	}
 
 
-	setSearchName(searchName: string) {
+	setSearchName(searchName: string): void {
 		this.sendAction({ searchName });
-	}
-
-
-	setCurrActorChoice(choice: Actor[]) {
-		this.sendAction({ currActorChoice: choice });
-	}
-
-
-	setCurrBaconPath(path: BaconPath) {
-		this.sendAction({ currBaconPath: path });
 	}
 }
 

@@ -11,10 +11,8 @@ import 'rxjs/add/operator/scan';
 
 import {
 	Actor,
-	ChoiceStore,
-	NconstStore,
 	BaconPath,
-	BaconPathStore,
+	DataStore,
 	SearchError,
 	View
 } from '../shared/models';
@@ -29,9 +27,10 @@ export class StateService {
 
 	constructor() {
 		this.store.actions
-			.scan((state: AppState, action: Action) => (
-				action(state)
-			), INITIAL_STATE)
+			.scan(
+				(state: AppState, action: Action) => action(state),
+				INITIAL_STATE
+			)
 			.distinctUntilChanged(deepEquals)
 			.subscribe(state => this.store.states.next(state));
 	}
@@ -47,12 +46,13 @@ export class StateService {
 	)
 
 
-	getHomeToggle = (): Observable<EventEmitter<boolean>> => (
-		this.store.states.pluck('homeToggle')
-	)
-
 	getInputDisabled = (): Observable<boolean> => (
 		this.store.states.pluck('inputDisabled')
+	)
+
+
+	getHomeToggle = (): Observable<EventEmitter<boolean>> => (
+		this.store.states.pluck('homeToggle')
 	)
 
 
@@ -66,11 +66,11 @@ export class StateService {
 	)
 
 
-	getStores = () => (
+	getStores = (): Observable<DataStore> => (
 		this.store.states.map((state: AppState) => ({
-			storedActors: state.storedActors,
+			storedActorChoices: state.storedActorChoices,
 			storedBaconPaths: state.storedBaconPaths,
-			storedChoices: state.storedActorChoices
+			storedNconsts: state.storedNconsts
 		}))
 	)
 

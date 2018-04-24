@@ -15,55 +15,55 @@ import {
 } from './models';
 
 
+export type Action = (prev: AppState, next?: AppStateUpdate) => AppState;
+
+
 export interface AppState {
 	currActorChoice: Actor[];
-	inputDisabled: boolean;
 	currBaconPath: BaconPath;
 	homeToggle: Subject<boolean>;
+	inputDisabled: boolean;
 	searchError: SearchError;
 	searchName: string;
-	storedActors: NconstStore;
-	storedBaconPaths: BaconPathStore;
 	storedActorChoices: ChoiceStore;
+	storedBaconPaths: BaconPathStore;
+	storedNconsts: NconstStore;
 	view: View;
 }
 
 
 export interface AppStateUpdate {
 	currActorChoice?: Actor[];
-	inputDisabled?: boolean;
 	currBaconPath?: BaconPath;
 	homeToggle?: Subject<boolean>;
+	inputDisabled?: boolean;
 	searchError?: SearchError;
 	searchName?: string;
-	storedActors?: NconstStore;
-	storedBaconPaths?: BaconPathStore;
 	storedActorChoices?: ChoiceStore;
+	storedBaconPaths?: BaconPathStore;
+	storedNconsts?: NconstStore;
 	view?: View;
 }
-
-
-export const INITIAL_STATE = {
-	currActorChoice: null,
-	inputDisabled: false,
-	currBaconPath: null,
-	homeToggle: new EventEmitter<boolean>(),
-	searchError: null,
-	searchName: null,
-	storedActors: new Map<string, Set<number>>(),
-	storedBaconPaths: new Map<number, BaconPath>(),
-	storedActorChoices: new Map<string, Actor[]>(),
-	view: View.Home
-};
-
-
-export type Action = (prev: AppState, next?: AppStateUpdate) => AppState;
 
 
 export interface AppStore {
 	actions: Subject<Action>;
 	states: BehaviorSubject<AppState>;
 }
+
+
+export const INITIAL_STATE: AppState = {
+	currActorChoice: null,
+	currBaconPath: null,
+	homeToggle: new EventEmitter<boolean>(),
+	inputDisabled: false,
+	searchError: null,
+	searchName: null,
+	storedActorChoices: new Map<string, Actor[]>(),
+	storedBaconPaths: new Map<number, BaconPath>(),
+	storedNconsts: new Map<string, Set<number>>(),
+	view: View.Home
+};
 
 
 export const STORE: AppStore = {

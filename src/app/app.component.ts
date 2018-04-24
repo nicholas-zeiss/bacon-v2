@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { LoadingComponent } from './loading/loading.component';
 
 import { BaconPath, View } from './shared/models';
+import { plainString } from './shared/utils';
 
 
 const VIEW_COMPONENT = {
@@ -47,7 +48,7 @@ export class AppComponent implements OnInit {
 		});
 
 		this.state.getCurrBaconPath().subscribe((path: BaconPath) => (
-			this.currDisplayActor = path ? this.formatStr(path[0].actor.name) : null
+			this.currDisplayActor = path ? plainString(path[0].actor.name) : null
 		));
 
 		this.state.getHomeToggle().subscribe((toggler: EventEmitter<boolean>) => (
@@ -56,18 +57,16 @@ export class AppComponent implements OnInit {
 	}
 
 
-	formatStr(str: string): string {
-		return str.trim().toLowerCase().replace(/\s+/, ' ');
-	}
-
-
 	search(name: string): void {
-		if (/^\s*kevin\s+bacon\s*$/i.test(name)) {
+		name = plainString(name);
+
+		if (name === 'kevin bacon') {
 			this.homeToggle.emit(true);
-		} else if (this.currDisplayActor !== this.formatStr(name)) {
+		} else if (this.currDisplayActor !== name) {
 			this.dispatch.disableInput();
 			this.baconPath.searchName(name);
 		}
+		// TODO - check if search name is currActor but that actor has choices
 	}
 }
 
