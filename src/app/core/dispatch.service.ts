@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 import { Action, AppState, AppStateUpdate, STORE } from '../shared/app-state';
-import { Actor, BaconPath, DataStore, isBaconPath, SearchError, View } from '../shared/models';
-import { copyActorChoice, copyBaconPath, plainString } from '../shared/utils';
+import { Actor, BaconPath, DataStore, SearchError, View } from '../shared/models';
+import { copyModel, isBaconPath, plainString } from '../shared/utils';
 
 
 @Injectable()
@@ -17,45 +17,36 @@ export class DispatchService {
 		this.actions.next((prev: AppState) => Object.assign({}, prev, obj));
 	}
 
-	private updateStore(prevStore: DataStore, update: Actor[] | BaconPath): DataStore {
-		let name: string;
-		let nconsts: number[];
 
-		const nextStore = {
-			storedActorChoices: new Map(prevStore.storedActorChoices),
-			storedBaconPaths: new Map(prevStore.storedBaconPaths),
-			storedNconsts: new Map(prevStore.storedNconsts)
-		};
+	addDataToStore(data: Actor[] | BaconPath): void {
+		data = copyModel(data);
 
-		if (isBaconPath(update)) {
-			name = plainString(update[0].actor.name);
-			nconsts = [update[0].actor._id];
-			nextStore.storedBaconPaths.set(nconsts[0], update);
-		} else {
-			name = plainString(update[0].name);
-			nconsts = update.map(actor => actor._id);
-			nextStore.storedActorChoices.set(name, update);
-		}
+		this.actions.next((prev: AppState) => {
+			let name: string;
+			let nconsts: number[];
 
-		const prevNconsts = prevStore.storedNconsts.get(name) || new Set<number>();
-		nconsts = [...Array.from(prevNconsts), ...nconsts];
-		nextStore.storedNconsts.set(name, new Set(nconsts));
+			const next = {
+				storedActorChoices: new Map(prev.storedActorChoices),
+				storedBaconPaths: new Map(prev.storedBaconPaths),
+				storedNconsts: new Map(prev.storedNconsts)
+			};
 
-		return nextStore;
-	}
+			if (isBaconPath(data)) {
+				name = plainString(data[0].actor.name);
+				nconsts = [data[0].actor._id];
+				next.storedBaconPaths.set(nconsts[0], data);
+			} else {
+				name = plainString(data[0].name);
+				nconsts = data.map(actor => actor._id);
+				next.storedActorChoices.set(name, data);
+			}
 
+			const prevNconsts = prev.storedNconsts.get(name) || new Set<number>();
+			nconsts = [...Array.from(prevNconsts), ...nconsts];
+			next.storedNconsts.set(name, new Set(nconsts));
 
-	addActorChoiceToStore(actors: Actor[]): void {
-		this.actions.next((prev: AppState) => (
-			Object.assign({}, prev, this.updateStore(prev, actors))
-		));
-	}
-
-
-	addBaconPathToStore(path: BaconPath): void {
-		this.actions.next((prev: AppState) => (
-			Object.assign({}, prev, this.updateStore(prev, path))
-		));
+			return Object.assign({}, prev, next);
+		});
 	}
 
 
@@ -70,12 +61,12 @@ export class DispatchService {
 
 
 	setCurrActorChoice(choice: Actor[]): void {
-		this.sendAction({ currActorChoice: choice });
+		this.sendAction({ currActorChoice: copyModel(choice) });
 	}
 
 
 	setCurrBaconPath(path: BaconPath): void {
-		this.sendAction({ currBaconPath: path });
+		this.sendAction({ currBaconPath: copyModel(path) });
 	}
 
 
@@ -105,7 +96,7 @@ export class DispatchService {
 
 
 	setSearchError(err: SearchError) {
-		this.sendAction({ searchError: err });
+		this.sendAction({ searchError: copyModel(err) });
 	}
 
 

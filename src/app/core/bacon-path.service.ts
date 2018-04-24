@@ -8,15 +8,8 @@ import { DispatchService } from './dispatch.service';
 import { ServerCallsService } from './server-calls.service';
 import { StateService } from './state.service';
 
-import {
-	Actor,
-	BaconPath,
-	DataStore,
-	isBaconPath,
-	SearchError
-} from '../shared/models';
-
-import { deepEquals, plainString } from '../shared/utils';
+import { Actor, BaconPath, DataStore, SearchError } from '../shared/models';
+import { deepEquals, isBaconPath, plainString } from '../shared/utils';
 
 
 @Injectable()
@@ -77,12 +70,12 @@ export class BaconPathService {
 	handleSuccess = (res: Actor[] | BaconPath): void => {
 		if (isBaconPath(res)) {
 			res.forEach(({ actor }) => actor.imgUrl = actor.imgUrl || '/assets/no-image.png');
-			this.dispatch.addBaconPathToStore(res);
 			this.displayBaconPath(res);
 		} else {
-			this.dispatch.addActorChoiceToStore(res);
 			this.displayActorChoice(res);
 		}
+
+		this.dispatch.addDataToStore(res);
 	}
 
 

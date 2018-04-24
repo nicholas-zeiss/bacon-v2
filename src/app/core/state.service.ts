@@ -9,16 +9,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/scan';
 
-import {
-	Actor,
-	BaconPath,
-	DataStore,
-	SearchError,
-	View
-} from '../shared/models';
-
 import { Action, AppState, AppStore, INITIAL_STATE, STORE } from '../shared/app-state';
-import { deepEquals } from '../shared/utils';
+import { Actor, BaconPath, DataStore, SearchError, View } from '../shared/models';
+import { copyModel, deepEquals } from '../shared/utils';
 
 
 @Injectable()
@@ -37,12 +30,18 @@ export class StateService {
 
 
 	getCurrActorChoice = (): Observable<Actor[]> => (
-		this.store.states.pluck('currActorChoice')
+		this.store.states
+			.pluck('currActorChoice')
+			.distinctUntilChanged(deepEquals)
+			.map(copyModel)
 	)
 
 
 	getCurrBaconPath = (): Observable<BaconPath> => (
-		this.store.states.pluck('currBaconPath')
+		this.store.states
+			.pluck('currBaconPath')
+			.distinctUntilChanged(deepEquals)
+			.map(copyModel)
 	)
 
 
@@ -57,7 +56,10 @@ export class StateService {
 
 
 	getSearchError = (): Observable<SearchError> => (
-		this.store.states.pluck('searchError')
+		this.store.states
+			.pluck('searchError')
+			.distinctUntilChanged(deepEquals)
+			.map(copyModel)
 	)
 
 

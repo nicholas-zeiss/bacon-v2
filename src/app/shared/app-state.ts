@@ -6,10 +6,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import {
 	Actor,
-	ChoiceStore,
-	NconstStore,
+	ActorChoiceStore,
 	BaconPath,
 	BaconPathStore,
+	NconstStore,
 	SearchError,
 	View
 } from './models';
@@ -25,7 +25,7 @@ export interface AppState {
 	inputDisabled: boolean;
 	searchError: SearchError;
 	searchName: string;
-	storedActorChoices: ChoiceStore;
+	storedActorChoices: ActorChoiceStore;
 	storedBaconPaths: BaconPathStore;
 	storedNconsts: NconstStore;
 	view: View;
@@ -39,7 +39,7 @@ export interface AppStateUpdate {
 	inputDisabled?: boolean;
 	searchError?: SearchError;
 	searchName?: string;
-	storedActorChoices?: ChoiceStore;
+	storedActorChoices?: ActorChoiceStore;
 	storedBaconPaths?: BaconPathStore;
 	storedNconsts?: NconstStore;
 	view?: View;
