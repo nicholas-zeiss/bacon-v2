@@ -17,11 +17,13 @@ export class LoadingComponent implements OnDestroy {
 
 	private subscription: Subscription;
 
+
 	constructor(state: StateService) {
 		this.subscription = state
 			.getSearchName()
 			.subscribe(name => this.name = name);
 	}
+
 
 	ngOnDestroy(): void {
 		this.subscription.unsubscribe();

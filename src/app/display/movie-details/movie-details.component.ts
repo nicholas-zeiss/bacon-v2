@@ -1,7 +1,7 @@
 
 
-import { Component, Input, OnInit, OnChanges, SimpleChange } from '@angular/core';
-import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { DetailNode } from '../layout-details';
 import { ArrowDetails, getArrowDetails } from './arrow-details';
@@ -35,13 +35,16 @@ import { ArrowDetails, getArrowDetails } from './arrow-details';
 export class MovieDetailsComponent implements OnInit {
 	@Input() hidden: boolean;
 	@Input() node: DetailNode;
+
 	arrowDetails: ArrowDetails;
 
-	ngOnInit() {
+
+	ngOnInit(): void {
 		this.arrowDetails = getArrowDetails(this.node.type);
 	}
 
-	getAnimationState() {
+
+	getAnimationState(): string {
 		if (this.hidden) {
 			if (this.node.rowIndex === 0) {
 				return /Short/.test(this.node.type) ? 'firstRowHiddenShort' : 'firstRowHidden';

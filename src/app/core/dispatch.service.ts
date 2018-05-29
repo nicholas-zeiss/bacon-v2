@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 import { Action, AppState, AppStateUpdate, STORE } from '../shared/app-state';
-import { Actor, BaconPath, DataStore, SearchError, View } from '../shared/models';
+import { Actor, BaconPath, SearchError, View } from '../shared/models';
 import { copyModel, isBaconPath, plainString } from '../shared/utils';
 
 

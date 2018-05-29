@@ -1,7 +1,7 @@
 
 
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
-import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { DetailNode } from '../layout-details';
@@ -29,13 +29,16 @@ import { DetailNode } from '../layout-details';
 export class ActorDetailsComponent implements OnInit {
 	@Input() hidden: boolean;
 	@Input() node: DetailNode;
+
 	bSrc = '';
 	hiddenState = 'hidden';
 	visibleState = 'visible';
 
+
 	constructor(private sanitizer: DomSanitizer) { }
 
-	getAnimationState() {
+
+	getAnimationState(): string {
 		if (this.hidden) {
 			return this.node.rowIndex === 0 ? 'firstRowHidden' : 'hidden';
 		}
@@ -43,7 +46,8 @@ export class ActorDetailsComponent implements OnInit {
 		return 'visible';
 	}
 
-	ngOnInit() {
+
+	ngOnInit(): void {
 		this.bSrc = this.sanitizer.bypassSecurityTrustStyle(`url('${this.node.actor.imgUrl}')`) as string;
 	}
 }

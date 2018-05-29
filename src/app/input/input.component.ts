@@ -3,7 +3,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
 
 
@@ -17,6 +16,7 @@ export class InputComponent {
 
 	inputDisabled: boolean;
 	searchForm = new FormGroup({ name: new FormControl('', Validators.required) });
+
 
 	constructor(state: StateService) {
 		state.getInputDisabled()

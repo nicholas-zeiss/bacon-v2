@@ -21,6 +21,7 @@ export class ChoiceComponent implements OnDestroy {
 
 	private subscription: Subscription;
 
+
 	constructor(
 		private baconPath: BaconPathService,
 		private dispatch: DispatchService,

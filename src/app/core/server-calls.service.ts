@@ -1,13 +1,13 @@
 
 
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 
 import { Actor, BaconPath } from '../shared/models';
 import { wrapSearchError } from '../shared/utils';

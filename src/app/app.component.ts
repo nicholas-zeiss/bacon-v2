@@ -11,7 +11,7 @@ import { ErrorComponent } from './error/error.component';
 import { HomeComponent } from './home/home.component';
 import { LoadingComponent } from './loading/loading.component';
 
-import { Actor, BaconPath, View } from './shared/models';
+import { BaconPath, View } from './shared/models';
 import { plainString } from './shared/utils';
 
 

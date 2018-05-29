@@ -4,6 +4,7 @@ import { animate, keyframes, style, transition, trigger } from '@angular/animati
 import { Component, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
+
 import 'rxjs/add/operator/first';
 
 import { StateService } from '../core/state.service';
@@ -28,6 +29,7 @@ export class HomeComponent implements OnDestroy {
 
 	private subscription: Subscription;
 	private toggleSubscription: Subscription;
+
 
 	constructor(appState: StateService) {
 		this.subscription = appState

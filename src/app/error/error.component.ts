@@ -19,6 +19,7 @@ export class ErrorComponent implements OnDestroy {
 
 	private subscription: Subscription;
 
+
 	constructor(
 		private dispatch: DispatchService,
 		state: StateService

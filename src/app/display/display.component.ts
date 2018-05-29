@@ -3,24 +3,23 @@
 import { Component, EventEmitter, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
+
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/first';
 
-import { getNodeTypes, NodeRow, NodeType } from './layout-details';
-
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-
 import { Actor, BaconPath, BaconPathNode, Movie } from '../shared/models';
 import { deepEquals } from '../shared/utils';
+import { getNodeTypes, NodeRow, NodeType } from './layout-details';
 
 
 // TODO: MAKE RESPONSIVE
 const rowLength = 5;
 
-function getRowIndex(pathIndex): number {
-	return 2 * Math.floor(pathIndex / (rowLength + 1)) + Math.floor((pathIndex % (rowLength + 1)) / rowLength);
-}
+const getRowIndex = (pathIndex: number): number => (
+	2 * Math.floor(pathIndex / (rowLength + 1)) + Math.floor((pathIndex % (rowLength + 1)) / rowLength)
+);
 
 
 @Component({
@@ -35,14 +34,15 @@ export class DisplayComponent implements OnDestroy {
 	scrollLock = true;
 	subscription: Subscription;
 
+
 	constructor(
-		private appState: StateService,
-		private dispatch: DispatchService
+		private dispatch: DispatchService,
+		appState: StateService
 	) {
 		this.subscription = appState
 			.getCurrBaconPath()
 			.distinctUntilChanged(deepEquals)
-			.subscribe(path => {
+			.subscribe((path: BaconPath): void => {
 				if (!path) {
 					return;
 				}
@@ -51,12 +51,11 @@ export class DisplayComponent implements OnDestroy {
 				this.nodeRows = [];
 				this.scrollLock = true;
 
-
 				const nodeTypes = getNodeTypes(path.length * 2 - 1);
 
-				path.forEach(({ actor, movie }, i) => {
-					this.addActor(actor, i, nodeTypes);
-					movie ? this.addMovie(movie, i, nodeTypes) : null;
+				path.forEach((node: BaconPathNode, i: number): void => {
+					this.addActor(node.actor, i);
+					node.movie ? this.addMovie(node.movie, i, nodeTypes) : null;
 				});
 
 				setTimeout(() => this.showNode(0, 0), 0);
@@ -64,7 +63,7 @@ export class DisplayComponent implements OnDestroy {
 	}
 
 
-	addActor(actor, index, nodeTypes) {
+	addActor(actor: Actor, index: number): void {
 		const actorRow = getRowIndex(2 * index);
 
 		const actorNode = {
@@ -79,7 +78,7 @@ export class DisplayComponent implements OnDestroy {
 	}
 
 
-	addMovie(movie, index, nodeTypes) {
+	addMovie(movie: Movie, index: number, nodeTypes: NodeType[]): void {
 		const movieRow = getRowIndex(2 * index + 1);
 
 		const movieNode = {
@@ -94,7 +93,7 @@ export class DisplayComponent implements OnDestroy {
 	}
 
 
-	showNode(rI, nI) {
+	showNode(rI: number, nI: number): void {
 		const row = this.nodeRows[rI];
 
 		row.show();
@@ -112,12 +111,12 @@ export class DisplayComponent implements OnDestroy {
 	}
 
 
-	reset() {
+	reset(): void {
 		this.dispatch.setViewHome();
 	}
 
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }

@@ -1,6 +1,5 @@
 
 
-import { ArrowDetails, getArrowDetails } from './movie-details/arrow-details';
 import { Actor, Movie } from '../shared/models';
 
 
