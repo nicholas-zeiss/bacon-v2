@@ -11,7 +11,7 @@ import { ErrorComponent } from './error/error.component';
 import { HomeComponent } from './home/home.component';
 import { LoadingComponent } from './loading/loading.component';
 
-import { BaconPath, View } from './shared/models';
+import { Actor, BaconPath, View } from './shared/models';
 import { plainString } from './shared/utils';
 
 
@@ -63,10 +63,10 @@ export class AppComponent {
 
 			if (storedChoice) {
 				this.baconPath.displayActorChoice(storedChoice);
+			} else {
+				this.baconPath.searchName(name);
 			}
 		}
-
-		this.baconPath.searchName(name);
 	}
 }
 

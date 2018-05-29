@@ -32,6 +32,7 @@ export function copyModel(obj: any): any {
 	return copy;
 }
 
+
 export function isActor(actor: any): actor is Actor {
 	return (
 		actor instanceof Object
@@ -44,9 +45,11 @@ export function isActor(actor: any): actor is Actor {
 	);
 }
 
+
 export function isActorChoice(actors: any): actors is Actor[] {
 	return actors instanceof Array && actors.every(actor => isActor(actor));
 }
+
 
 export function isBaconPath(path: any): path is BaconPath {
 	return path instanceof Array && path.every(node => (
@@ -56,6 +59,7 @@ export function isBaconPath(path: any): path is BaconPath {
 	));
 }
 
+
 export function isMovie(movie: any): movie is Movie {
 	return (
 		movie instanceof Object
@@ -63,6 +67,7 @@ export function isMovie(movie: any): movie is Movie {
 		&& typeof movie.year === 'number'
 	);
 }
+
 
 export function wrapSearchError(name: string, errCode: number): SearchError {
 	if (errCode === 404) {
@@ -85,6 +90,7 @@ export function wrapSearchError(name: string, errCode: number): SearchError {
 
 type MapSet = Map<any, any> | Set<any>;
 
+
 function arrayEquals(a: Array<any>, b: Array<any>): boolean {
 	if (a.length !== b.length) {
 		return false;
@@ -92,6 +98,7 @@ function arrayEquals(a: Array<any>, b: Array<any>): boolean {
 
 	return a.every((v, i) => deepEquals(v, b[i]));
 }
+
 
 function mapSetEquals(a: MapSet, b: MapSet): boolean {
 	if (a.size !== b.size) {
@@ -108,8 +115,9 @@ function mapSetEquals(a: MapSet, b: MapSet): boolean {
 		}
 	});
 
-	return true;
+	return equal;
 }
+
 
 function objectEquals(a: Object, b: Object): boolean {
 	if (Object.keys(a).length !== Object.keys(b).length) {
@@ -124,6 +132,7 @@ function objectEquals(a: Object, b: Object): boolean {
 
 	return true;
 }
+
 
 export function deepEquals(a, b): boolean {
 	if (a === b) {

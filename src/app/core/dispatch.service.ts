@@ -90,6 +90,7 @@ export class DispatchService {
 		}));
 	}
 
+
 	setSearchError(err: SearchError): void {
 		this.sendAction(expandDefault({
 			searchError: copyModel(err),
