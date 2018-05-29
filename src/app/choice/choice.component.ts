@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { BaconPathService } from '../core/bacon-path.service';
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
+
 import { Actor } from '../shared/models';
 
 
@@ -17,30 +18,31 @@ import { Actor } from '../shared/models';
 })
 export class ChoiceComponent implements OnDestroy {
 	choice: Actor[];
-	subscription: Subscription;
+
+	private subscription: Subscription;
 
 	constructor(
 		private baconPath: BaconPathService,
 		private dispatch: DispatchService,
-		private state: StateService
+		state: StateService
 	) {
 		this.subscription = state
 			.getCurrActorChoice()
-			.subscribe((choice: Actor[]) => this.choice = choice);
+			.subscribe(choice => this.choice = choice);
 	}
 
 
-	reset() {
+	reset(): void {
 		this.dispatch.setViewHome();
 	}
 
 
-	chooseActor(actor: Actor) {
+	chooseActor(actor: Actor): void {
 		this.baconPath.searchNconst(actor._id);
 	}
 
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }

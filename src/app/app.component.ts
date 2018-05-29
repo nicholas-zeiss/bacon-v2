@@ -1,9 +1,8 @@
 
 
-import { Component, EventEmitter, OnInit, Type } from '@angular/core';
+import { Component, EventEmitter, Type } from '@angular/core';
 
 import { BaconPathService } from './core/bacon-path.service';
-import { DispatchService } from './core/dispatch.service';
 import { StateService } from './core/state.service';
 
 import { ChoiceComponent } from './choice/choice.component';
@@ -30,28 +29,24 @@ const VIEW_COMPONENT = {
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 	currDisplayActor: string = null;
 	homeToggle: EventEmitter<boolean>;
 	viewComponent: Type<any>;
 
 	constructor(
 		private baconPath: BaconPathService,
-		private dispatch: DispatchService,
-		private state: StateService
-	) { }
-
-
-	ngOnInit(): void {
-		this.state.getView().subscribe((nextView: View) => {
+		state: StateService
+	) {
+		state.getView().subscribe((nextView: View) => {
 			this.viewComponent = VIEW_COMPONENT[nextView];
 		});
 
-		this.state.getCurrBaconPath().subscribe((path: BaconPath) => (
+		state.getCurrBaconPath().subscribe((path: BaconPath) => (
 			this.currDisplayActor = path ? plainString(path[0].actor.name) : null
 		));
 
-		this.state.getHomeToggle().subscribe((toggler: EventEmitter<boolean>) => (
+		state.getHomeToggle().subscribe((toggler: EventEmitter<boolean>) => (
 			this.homeToggle = toggler
 		));
 	}
@@ -62,6 +57,7 @@ export class AppComponent implements OnInit {
 
 		if (name === 'kevin bacon') {
 			this.homeToggle.emit(true);
+
 		} else if (this.currDisplayActor !== name) {
 			const storedChoice = this.baconPath.getStoredActorChoice(name);
 

@@ -3,7 +3,6 @@
 import { Actor, BaconPath, Movie, SearchError } from './models';
 
 
-
 // converts names into a consistent format for usage as a storage key
 export const plainString = (str: string): string => (
 	str.trim().toLowerCase().replace(/\s+/, ' ')
@@ -75,6 +74,8 @@ export function wrapSearchError(name: string, errCode: number): SearchError {
 		return { message: `Internal Server Error: ${errCode}` };
 	}
 }
+
+
 
 
 /*

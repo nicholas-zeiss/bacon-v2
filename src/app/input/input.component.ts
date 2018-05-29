@@ -14,18 +14,12 @@ import { StateService } from '../core/state.service';
 })
 export class InputComponent {
 	@Output() search = new EventEmitter<string>();
+
 	inputDisabled: boolean;
-	searchForm = new FormGroup({
-		name: new FormControl('', Validators.required)
-	});
+	searchForm = new FormGroup({ name: new FormControl('', Validators.required) });
 
-
-	constructor(
-		private dispatch: DispatchService,
-		private state: StateService
-	) {
-		state
-			.getInputDisabled()
+	constructor(state: StateService) {
+		state.getInputDisabled()
 			.subscribe(disabled => {
 				disabled ? this.searchForm.disable() : this.searchForm.enable();
 				this.inputDisabled = disabled;
@@ -33,7 +27,7 @@ export class InputComponent {
 	}
 
 
-	searchActor() {
+	searchActor(): void {
 		this.search.emit(this.searchForm.value.name);
 		this.searchForm.reset();
 	}

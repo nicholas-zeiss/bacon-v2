@@ -15,8 +15,9 @@ import { SearchError } from '../shared/models';
 	styleUrls: ['./error.component.css']
 })
 export class ErrorComponent implements OnDestroy {
-	private subscription: Subscription;
 	error: SearchError;
+
+	private subscription: Subscription;
 
 	constructor(
 		private dispatch: DispatchService,
@@ -28,12 +29,12 @@ export class ErrorComponent implements OnDestroy {
 	}
 
 
-	reset() {
+	reset(): void {
 		this.dispatch.setViewHome();
 	}
 
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }

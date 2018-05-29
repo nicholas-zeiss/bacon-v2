@@ -27,15 +27,18 @@ h1 {
 	width: calc(100% - 3rem);
 }
 
+
 .actor-choice:hover {
 	background-color: #c72222;
 }
+
 
 .actor-choice:first-of-type {
 	border-radius: 3px 3px 0 0;
 	border-top-width: 2px;
 	margin-top: 2rem;
 }
+
 
 .actor-choice:last-of-type {
 	border-bottom-width: 2px;
@@ -76,8 +79,8 @@ h1 {
 
 button {
 	background-color: #23bc61;
-	border-radius: 3px;
 	border: 1px solid #198a46;
+	border-radius: 3px;
 	box-shadow: 0 0 6px 1px #666;
 	color: #f8f8f8;
 	cursor: pointer;

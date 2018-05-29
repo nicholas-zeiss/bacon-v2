@@ -13,8 +13,9 @@ import { StateService } from '../core/state.service';
 	styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent implements OnDestroy {
-	private subscription: Subscription;
 	name: string;
+
+	private subscription: Subscription;
 
 	constructor(state: StateService) {
 		this.subscription = state
@@ -22,7 +23,7 @@ export class LoadingComponent implements OnDestroy {
 			.subscribe(name => this.name = name);
 	}
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }
