@@ -11,15 +11,13 @@ import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
 import { Actor, BaconPath, BaconPathNode, Movie } from '../shared/models';
 import { deepEquals } from '../shared/utils';
-import { getNodeTypes, NodeRow, NodeType } from './layout-details';
+import { DeviceWidth, getNodeTypes, NodeRow, NodeType } from './layout-details';
 
 
-// TODO: MAKE RESPONSIVE
-const rowLength = 5;
-
-const getRowIndex = (pathIndex: number): number => (
-	2 * Math.floor(pathIndex / (rowLength + 1)) + Math.floor((pathIndex % (rowLength + 1)) / rowLength)
-);
+const ROW_LENGTHS = {
+	[DeviceWidth.medium]: 5,
+	[DeviceWidth.small]: 3
+};
 
 
 @Component({
@@ -33,12 +31,19 @@ export class DisplayComponent implements OnDestroy {
 	rowAddedEmitter = new EventEmitter<number>();
 	scrollLock = true;
 	subscription: Subscription;
+	width: DeviceWidth;
 
 
 	constructor(
 		private dispatch: DispatchService,
 		appState: StateService
 	) {
+		if (window.innerWidth < 800) {
+			this.width = DeviceWidth.small;
+		} else {
+			this.width = DeviceWidth.medium;
+		}
+
 		this.subscription = appState
 			.getCurrBaconPath()
 			.distinctUntilChanged(deepEquals)
@@ -51,7 +56,7 @@ export class DisplayComponent implements OnDestroy {
 				this.nodeRows = [];
 				this.scrollLock = true;
 
-				const nodeTypes = getNodeTypes(path.length * 2 - 1);
+				const nodeTypes = getNodeTypes(path.length * 2 - 1, this.width);
 
 				path.forEach((node: BaconPathNode, i: number): void => {
 					this.addActor(node.actor, i);
@@ -63,8 +68,14 @@ export class DisplayComponent implements OnDestroy {
 	}
 
 
+	getRowIndex(nI: number): number {
+		const rI = ROW_LENGTHS[this.width];
+		return 2 * Math.floor(nI / (rI + 1)) + Math.floor((nI % (rI + 1)) / rI);
+	}
+
+
 	addActor(actor: Actor, index: number): void {
-		const actorRow = getRowIndex(2 * index);
+		const actorRow = this.getRowIndex(2 * index);
 
 		const actorNode = {
 			hidden: true,
@@ -73,13 +84,13 @@ export class DisplayComponent implements OnDestroy {
 			actor
 		};
 
-		this.nodeRows[actorRow] = this.nodeRows[actorRow] || new NodeRow(actorRow);
+		this.nodeRows[actorRow] = this.nodeRows[actorRow] || new NodeRow(actorRow, this.width);
 		this.nodeRows[actorRow].nodes.push(actorNode);
 	}
 
 
 	addMovie(movie: Movie, index: number, nodeTypes: NodeType[]): void {
-		const movieRow = getRowIndex(2 * index + 1);
+		const movieRow = this.getRowIndex(2 * index + 1);
 
 		const movieNode = {
 			hidden: true,
@@ -88,7 +99,7 @@ export class DisplayComponent implements OnDestroy {
 			movie
 		};
 
-		this.nodeRows[movieRow] = this.nodeRows[movieRow] || new NodeRow(movieRow);
+		this.nodeRows[movieRow] = this.nodeRows[movieRow] || new NodeRow(movieRow, this.width);
 		this.nodeRows[movieRow].nodes.push(movieNode);
 	}
 

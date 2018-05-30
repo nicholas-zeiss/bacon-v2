@@ -80,7 +80,7 @@ export function getArrowDetails(type: NodeType): ArrowDetails {
 				lineEnd: { x: 512, y: 228 },
 				year: { x: 500, y: 100, anchor: 'end' },
 				title: { x: 100, y: 110, width: 400, height: 120, align: 'right' },
-				styles: { 'padding-left': '200px' }
+				styles: {}
 			});
 
 			break;

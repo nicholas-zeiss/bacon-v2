@@ -88,3 +88,17 @@ form > input:last-child:hover {
 	background-color: #aab4c4;
 }
 
+
+@media (max-width: 440px) {
+	header {
+		height: 8.125rem;
+	}
+}
+
+
+@media (min-width: 441px) and (max-width: 750px) {
+	header {
+		height: 5.75rem
+	}
+}
+

@@ -17,11 +17,16 @@ export class NodeRow {
 	nodes: DetailNode[] = [];
 	styles = { display: 'none' };
 
-	constructor(index: number) {
+	constructor(index: number, width: DeviceWidth) {
 		if (index === 0) {
 			this.classNames.push('first-row');
 		} else if (index % 2) {
+			if (width === DeviceWidth.medium) {
+				this.styles['justify-content'] = index === 3 ? 'flex-start' : 'flex-end';
+			}
+
 			this.classNames.push('arrow-row');
+
 		} else if (index === 2) {
 			this.classNames.push('reverse-row');
 		}
@@ -30,6 +35,12 @@ export class NodeRow {
 	show() {
 		delete this.styles.display;
 	}
+}
+
+
+export enum DeviceWidth {
+	'small',
+	'medium'
 }
 
 
@@ -49,79 +60,142 @@ export enum NodeType {
 }
 
 
-export function getNodeTypes(numOfNodes: number): NodeType[] {
-	switch (numOfNodes) {
-		case 3:
-			return [
-				NodeType.actor,
-				NodeType.right,
-				NodeType.actor
-			];
+const MEDIUM_NODE_TYPES = {
+	3: [
+		NodeType.actor,
+		NodeType.right,
+		NodeType.actor
+	],
+	5: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor
+	],
+	7: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightCenterLong,
+		NodeType.actor
+	],
+	9: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightCenterShort,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor
+	],
+	11: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.downOnRight,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor
+	],
+	13: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.downOnRight,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor,
+		NodeType.leftCenterLong,
+		NodeType.actor
+	]
+};
 
-		case 5:
-			return [
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor
-			];
 
-		case 7:
-			return [
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.rightCenterLong,
-				NodeType.actor
-			];
+const SMALL_NODE_TYPES = {
+	3: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor
+	],
+	5: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightCenter,
+		NodeType.actor
+	],
+	7: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.downOnRight,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor
+	],
+	9: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.downOnRight,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor,
+		NodeType.leftCenter,
+		NodeType.actor
+	],
+	11: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.downOnRight,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor,
+		NodeType.downOnLeft,
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor
+	],
+	13: [
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.downOnRight,
+		NodeType.actor,
+		NodeType.leftShort,
+		NodeType.actor,
+		NodeType.downOnLeft,
+		NodeType.actor,
+		NodeType.rightShort,
+		NodeType.actor,
+		NodeType.rightCenter,
+		NodeType.actor
+	]
+};
 
-		case 9:
-			return [
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.rightCenterShort,
-				NodeType.actor,
-				NodeType.leftShort,
-				NodeType.actor
-			];
 
-		case 11:
-			return [
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.downOnRight,
-				NodeType.actor,
-				NodeType.leftShort,
-				NodeType.actor,
-				NodeType.leftShort,
-				NodeType.actor
-			];
+const NODE_TYPES = {
+	[DeviceWidth.small]: SMALL_NODE_TYPES,
+	[DeviceWidth.medium]: MEDIUM_NODE_TYPES
+};
 
-		case 13:
-			return [
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.rightShort,
-				NodeType.actor,
-				NodeType.downOnRight,
-				NodeType.actor,
-				NodeType.leftShort,
-				NodeType.actor,
-				NodeType.leftShort,
-				NodeType.actor,
-				NodeType.leftCenterLong,
-				NodeType.actor
-			];
-	}
-}
+
+export const getNodeTypes = (num: number, width: DeviceWidth): NodeType[] => (
+	NODE_TYPES[width][num]
+);
+
 

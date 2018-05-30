@@ -38,3 +38,18 @@
 	text-align: center;
 }
 
+
+
+@media (max-width: 440px) {
+	.view {
+		height: calc(100vh - 11.625rem);
+	}
+}
+
+
+@media (min-width: 441px) and (max-width: 750px) {
+	.view {
+		height: calc(100vh - 9.25rem);
+	}
+}
+
