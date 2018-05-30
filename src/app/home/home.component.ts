@@ -1,7 +1,13 @@
+/**
+ *
+ *	Renders a simple homepage with an image of Kevin Bacon. If one searches for Kevin Bacon, this
+ *	image is animated.
+ *
+**/
 
 
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -35,10 +41,10 @@ export class HomeComponent implements OnDestroy {
 		this.subscription = appState
 			.getHomeToggle()
 			.first()
-			.subscribe(toggleEmitter => {
-				this.toggleSubscription = toggleEmitter.subscribe(toggle => (
-					toggle ? this.toggleImage() : null
-				));
+			.subscribe((toggleEmitter: EventEmitter<boolean>): void => {
+				this.toggleSubscription = toggleEmitter.subscribe((toggle: boolean): void => {
+					toggle ? this.toggleImage() : null;
+				});
 			});
 	}
 

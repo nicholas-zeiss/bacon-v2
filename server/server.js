@@ -16,12 +16,11 @@ const app = express();
 
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../dist')));
 
 
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../dist/index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, '../dist')));
+}
 
 
 // Helper for /name and /nconst post requests
@@ -110,7 +109,7 @@ app.post('/api/nconst', (req, res) => {
 });
 
 
-const port = process.argv[2] ? Number(process.argv[2]) : 8080;
+const port = process.env.PORT ? Number(process.env.PORT) : 8080;
 
 app.listen(port, () => console.log('bacon is listening to port ', port));
 

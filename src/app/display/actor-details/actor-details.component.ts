@@ -1,3 +1,13 @@
+/**
+ *
+ *	This component displays an actor node in the bacon path. It is by default hidden until its turn to be displayed,
+ *	at which point it is inserted via an animation. All nodes have their opacity animated, while nodes in the first row
+ *	receive additional animations of their width.
+ *
+ *	This component has two inputs, a 'hidden' attribute yielding a boolean that triggers the node becoming visible,
+ *	and the 'node' attribute yielding the DetailNode holding the actor data.
+ *
+**/
 
 
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
@@ -30,7 +40,7 @@ export class ActorDetailsComponent implements OnInit {
 	@Input() hidden: boolean;
 	@Input() node: DetailNode;
 
-	bSrc = '';
+	bSrc = '';								// We must sanitize our img url for the actor in order for angular to display it
 	hiddenState = 'hidden';
 	visibleState = 'visible';
 

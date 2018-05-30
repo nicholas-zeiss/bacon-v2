@@ -1,3 +1,9 @@
+/**
+ *
+ *	When a user searches a name that has multiple results, this component displays them and allows the
+ *	user to select the actor they desire.
+ *
+**/
 
 
 import { Component, OnDestroy } from '@angular/core';
@@ -29,7 +35,9 @@ export class ChoiceComponent implements OnDestroy {
 	) {
 		this.subscription = state
 			.getCurrActorChoice()
-			.subscribe(choice => this.choice = choice);
+			.subscribe((choice: Actor[]): void => {
+				this.choice = choice;
+			});
 	}
 
 

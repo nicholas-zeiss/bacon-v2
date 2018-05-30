@@ -1,4 +1,8 @@
-
+/**
+ *
+ *	Root module of the app. Bundles it all together.
+ *
+**/
 
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';

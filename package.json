@@ -4,8 +4,8 @@
 		"license": "MIT",
 		"scripts": {
 				"ng": "ng",
-				"start": "nodemon ./server/server.js & ng serve --proxy-config proxy.config.json --sourcemaps=true",
-				"start-prod": "ng build --prod && node server/server.js",
+				"start": "nodemon ./server/server.js & ng serve --proxy-config proxy.config.json --sourcemaps=true --watch",
+				"start-prod": "ng build --prod && NODE_ENV=production PORT=4200 node server/server.js",
 				"build": "ng build --prod",
 				"test": "ng test",
 				"lint": "ng lint",

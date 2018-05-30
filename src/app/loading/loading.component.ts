@@ -1,3 +1,8 @@
+/**
+ *
+ *	Displays a spinner and loading message while the app waits for a server response to a search
+ *
+**/
 
 
 import { Component, OnDestroy } from '@angular/core';

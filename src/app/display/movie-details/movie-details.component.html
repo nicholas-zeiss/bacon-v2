@@ -1,11 +1,11 @@
 
 
-<div [ngStyle]="arrowDetails.styles" [@visibility]="getAnimationState()">
+<div style="box-sizing: border-box;" [@visibility]="getAnimationState()">
 	<svg
 		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
-		[attr.width]="arrowDetails.width"
 		[attr.height]="arrowDetails.height"
+		[attr.width]="arrowDetails.width"
 	>
 
 		<line
@@ -42,8 +42,16 @@
 			[attr.y]="arrowDetails.title.y"
 		>
 			<xhtml:p
-				[ngStyle]="{'width': '100%', 'height': '100%', 'margin.px': 0, 'font-size.px': 12, 'text-align': arrowDetails.title.align, 'overflow-wrap': 'break-word', 'color': '#272727'}"
 				xmlns="http://www.w3.org/1999/xhtml"
+				[ngStyle]="{
+					'color': '#272727',
+					'font-size.px': 12,
+					'height': '100%',
+					'margin.px': 0,
+					'overflow-wrap': 'break-word',
+					'text-align': arrowDetails.title.align,
+					'width': '100%'
+				}"
 			>
 				{{ node.movie.title }}
 			</xhtml:p>

@@ -1,3 +1,8 @@
+/**
+ *
+ *	This service handles manipulation of the state by dispatching actions the store, which are processed in StateService.
+ *
+**/
 
 
 import { Injectable } from '@angular/core';
@@ -17,6 +22,7 @@ const DEFAULT_STATE = {
 	searchName: null
 };
 
+// helper function for dispatches that set the state to mostly default values.
 const expandDefault = (update: AppStateUpdate): AppStateUpdate => (
 	Object.assign({}, DEFAULT_STATE, update)
 );
@@ -25,12 +31,14 @@ const expandDefault = (update: AppStateUpdate): AppStateUpdate => (
 @Injectable()
 export class DispatchService {
 	private actions: Subject<Action> = STORE.actions;
-
 	private sendAction(obj: AppStateUpdate): void {
 		this.actions.next((prev: AppState) => Object.assign({}, prev, obj));
 	}
 
 
+	// When a search for an actor not already found is successful, we store the resulting data here.
+	// This data can either be a choice of actors matching the searched name, or a bacon path.
+	// For both, the nconst id # of the actor(s) is stored with their names.
 	addDataToStore(data: Actor[] | BaconPath): void {
 		data = copyModel(data);
 

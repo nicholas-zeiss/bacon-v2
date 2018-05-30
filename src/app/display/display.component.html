@@ -4,7 +4,7 @@
 	<h2>{{ name }}</h2>
 	<button type="button" (click)="reset()">Reset</button>
 </section>
-<section class="content-container" [appScrollLock]="scrollLock" [appAutoScroll]="rowAddedEmitter">
+<section class="content-container" (wheel)="!scrollLock" [appAutoScroll]="rowAddedEmitter">
 	<div class="content">
 		<div
 			*ngFor="let row of nodeRows; index as i"

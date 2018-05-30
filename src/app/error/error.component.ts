@@ -1,3 +1,8 @@
+/**
+ *
+ *	Displays a search error and a reset button.
+ *
+**/
 
 
 import { Component, OnDestroy } from '@angular/core';
@@ -26,7 +31,9 @@ export class ErrorComponent implements OnDestroy {
 	) {
 		this.subscription = state
 			.getSearchError()
-			.subscribe(err => this.error = err);
+			.subscribe((err: SearchError): void => {
+				this.error = err;
+			});
 	}
 
 

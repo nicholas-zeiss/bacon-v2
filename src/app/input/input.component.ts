@@ -1,3 +1,9 @@
+/**
+ *
+ *	The component holding the search bar at the top of the page. When a search is executed the search text
+ *	is emitted to this component's parent, the AppComponent.
+ *
+**/
 
 
 import { Component, EventEmitter, Output } from '@angular/core';

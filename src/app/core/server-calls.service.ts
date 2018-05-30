@@ -1,3 +1,9 @@
+/**
+ *
+ *	This service handles server requests made upon searching for an actor. Searches can be conducted either
+ *	by name, or by a unique id # (aka nconst).
+ *
+**/
 
 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -13,6 +19,8 @@ import { Actor, BaconPath } from '../shared/models';
 import { wrapSearchError } from '../shared/utils';
 
 
+// If the error is that of their being multiple choices (response code 300), we return a SearchError object.
+// Otherwise, we simply return the errror status.
 const convertError = (id: number | string, err: HttpErrorResponse): Observable<any> => (
 	err.status === 300 ?
 		Observable.of(err.error) :

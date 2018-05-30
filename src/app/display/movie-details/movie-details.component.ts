@@ -1,3 +1,14 @@
+/**
+ *
+ *	This component displays a movie as an arrow connecting two actors in the bacon path via an svg element.
+ *	It is by default hidden until its turn to be displayed, at which point it is inserted via an animation.
+ *	All nodes have their opacity animated, while nodes in the first row receive additional animations of their width.
+ *	As there are two possible sizes of a first row movie node there are two corresponding first row animations.
+ *
+ *	This component has two inputs, a 'hidden' attribute yielding a boolean that triggers the node becoming visible,
+ *	and the 'node' attribute yielding the DetailNode holding the movie data.
+ *
+**/
 
 
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
@@ -39,6 +50,8 @@ export class MovieDetailsComponent implements OnInit {
 	arrowDetails: ArrowDetails;
 
 
+	// Once initialized we must get details corresponding to the arrow type used in
+	// our svg template
 	ngOnInit(): void {
 		this.arrowDetails = getArrowDetails(this.node.type);
 	}

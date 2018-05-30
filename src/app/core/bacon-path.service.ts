@@ -1,3 +1,10 @@
+/**
+ *
+ *	Service that handles manipulating the BaconPath models and manipulation. When a name is to be searched for, this service
+ *	is responsible for determining if the search has already been stored or if the server must be queried, handling server responses,
+ *	storing new data on a successful server response, and triggering the display of subsequent views.
+ *
+**/
 
 
 import { Injectable } from '@angular/core';
@@ -8,13 +15,14 @@ import { DispatchService } from './dispatch.service';
 import { ServerCallsService } from './server-calls.service';
 import { StateService } from './state.service';
 
-import { Actor, BaconPath, DataStore, SearchError } from '../shared/models';
+import { Actor, BaconPath, BaconPathNode, DataStore, SearchError } from '../shared/models';
 import { deepEquals, isBaconPath, plainString } from '../shared/utils';
 
 
 @Injectable()
 export class BaconPathService {
 	private pastData: DataStore;
+
 
 	constructor(
 		private dispatch: DispatchService,
@@ -23,7 +31,9 @@ export class BaconPathService {
 	) {
 		state.getStores()
 			.distinctUntilChanged(deepEquals)
-			.subscribe(stores => this.pastData = stores);
+			.subscribe((stores: DataStore): void => {
+				this.pastData = stores;
+			});
 	}
 
 
@@ -73,8 +83,12 @@ export class BaconPathService {
 
 	handleSuccess = (res: Actor[] | BaconPath): void => {
 		if (isBaconPath(res)) {
-			res.forEach(({ actor }) => actor.imgUrl = actor.imgUrl || '/assets/no-image.png');
+			res.forEach((node: BaconPathNode): void => {
+				node.actor.imgUrl = node.actor.imgUrl || '/assets/no-image.png';
+			});
+
 			this.displayBaconPath(res);
+
 		} else {
 			this.displayActorChoice(res);
 		}

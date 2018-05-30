@@ -1,3 +1,8 @@
+/**
+ *
+ *	Various helper functions for dealing with the data models/app store/etc.
+ *
+**/
 
 
 import { Actor, BaconPath, Movie, SearchError } from './models';

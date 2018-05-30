@@ -44,7 +44,7 @@ const processBatch = (db, batch)  => {
 
 // Finds all actors in the actor collection with unassigned images and resolves to an array of
 // batches containing them.
-const getBatches = (db) => (
+const getBatches = db => (
 	new Promise((resolve, reject) => {
 		const batches = [];
 		let currActors = [];
@@ -95,7 +95,7 @@ const runBatches = (db, batches) => {
 	console.log('Adding images for ' + total + ' batches of ' + BATCH_SIZE + ' actors');
 
 	return batches.reduce((count, batch, i) => (
-		count.then((n) => (
+		count.then(n => (
 			processBatch(db, batch)
 				.then(() => {
 					if (i % 50 === 0) {
