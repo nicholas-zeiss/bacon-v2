@@ -4,26 +4,28 @@
 	<h2>{{ name }}</h2>
 	<button type="button" (click)="reset()">Reset</button>
 </section>
-<section class="content-container" >
+<section class="content-container" (wheel)="!scrollLock" [appAutoScroll]="rowAddedEmitter">
 	<div class="content">
 		<div
 			*ngFor="let row of nodeRows; index as i"
 			[ngClass]="row.classNames"
-			[style.display]="row.visibility === 'hidden' ? 'none' : ''"
+			[ngStyle]="row.styles"
 		>
 			<ng-container *ngFor="let node of row.nodes">
-				<app-actor-details
-					*ngIf="node.type === 'actor'"
-					[@detailNode]="node.visibility"
-					[node]="node"
-				>
-				</app-actor-details>
-				<app-movie-details
-					*ngIf="node.type !== 'actor'"
-					[@detailNode]="node.visibility"
-					[node]="node"
-				>
-				</app-movie-details>
+ 				<app-actor-details
+ 					*ngIf="node.type === 'actor'; else elseBlock"
+ 					[hidden]="node.hidden"
+ 					[node]="node"
+ 				>
+ 				</app-actor-details>
+				<ng-template #elseBlock>
+					<app-movie-details
+						*ngIf="node.type !== 'actor'"
+						[hidden]="node.hidden"
+						[node]="node"
+					>
+					</app-movie-details>
+				</ng-template>
 			</ng-container>
 		</div>
 	</div>

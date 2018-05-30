@@ -1,9 +1,14 @@
+/**
+ *
+ *	The component holding the search bar at the top of the page. When a search is executed the search text
+ *	is emitted to this component's parent, the AppComponent.
+ *
+**/
 
 
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
 
 
@@ -14,18 +19,13 @@ import { StateService } from '../core/state.service';
 })
 export class InputComponent {
 	@Output() search = new EventEmitter<string>();
-	private inputDisabled: boolean;
-	private searchForm = new FormGroup({
-		name: new FormControl('', Validators.required)
-	});
+
+	inputDisabled: boolean;
+	searchForm = new FormGroup({ name: new FormControl('', Validators.required) });
 
 
-	constructor(
-		private dispatch: DispatchService,
-		private state: StateService
-	) {
-		state
-			.getInputDisabled()
+	constructor(state: StateService) {
+		state.getInputDisabled()
 			.subscribe(disabled => {
 				disabled ? this.searchForm.disable() : this.searchForm.enable();
 				this.inputDisabled = disabled;
@@ -33,7 +33,7 @@ export class InputComponent {
 	}
 
 
-	searchActor() {
+	searchActor(): void {
 		this.search.emit(this.searchForm.value.name);
 		this.searchForm.reset();
 	}

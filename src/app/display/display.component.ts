@@ -1,128 +1,146 @@
+/**
+ *
+ *	This component displays bacon paths visually to the user. Upon initialization, the user scroll is disabled and the
+ *	actor/movie nodes of the bacon path are displayed one by one. When the bottom row overflows the page is scrolled automatically.
+ *	Once all nodes have displayed the scroll and input are unlocked, or the user can hit reset to return to the home page.
+ *
+**/
 
 
-import { Component, OnDestroy } from '@angular/core';
-import { trigger, state, keyframes, style, animate, transition } from '@angular/animations';
+import { Component, EventEmitter, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
+
+import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/first';
 
-import { ActorNode, DetailNode, getNodeTypes, MovieNode, NodeRow } from './layout-details';
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { Actor, isActor } from '../shared/actor';
-import { BaconPath, BaconPathNode } from '../shared/bacon-path';
-import { Movie } from '../shared/movie';
+import { Actor, BaconPath, BaconPathNode, Movie } from '../shared/models';
+import { deepEquals } from '../shared/utils';
+import { DeviceWidth, getNodeTypes, NodeRow, NodeType } from './layout-details';
 
 
-// TODO: MAKE RESPONSIVE
-const rowLength = 5;
-
-const getRowIndex = (pathIndex) => (
-	2 * Math.floor(pathIndex / (rowLength + 1)) + Math.floor((pathIndex % (rowLength + 1)) / rowLength)
-);
+// Max number of nodes per row for the current window size
+const ROW_LENGTHS = {
+	[DeviceWidth.medium]: 5,
+	[DeviceWidth.small]: 3
+};
 
 
 @Component({
-	animations: [
-		trigger('detailNode', [
-			state('firstHiddenActor', style({ display: 'none' })),
-			state('firstHiddenMovie', style({ display: 'none' })),
-			state('firstHiddenMovieShort', style({ display: 'none' })),
-			state('hidden', style({ visibility: 'hidden' })),
-			state('visible', style({ visibility: 'visible' })),
-			transition('firstHiddenActor => visible', [
-				animate(1000, keyframes([
-					style({ opacity: 0, width: '0rem', offset:  0}),
-					style({ opacity: 0, width: '10.5rem', offset:  .5}),
-					style({ opacity: 1, width: '10.5rem', offset: 1 })
-				]))
-			]),
-			transition('firstHiddenMovie => visible', [
-				animate(1000, keyframes([
-					style({ opacity: 0, width: '0rem', offset: 0 }),
-					style({ opacity: 0, width: '15.5rem', offset: .5 }),
-					style({ opacity: 1, width: '15.5rem', offset: 1 })
-				]))
-			]),
-			transition('firstHiddenMovieShort => visible', [
-				animate(1000, keyframes([
-					style({ opacity: 0, width: '0rem', offset: 0 }),
-					style({ opacity: 0, width: '8.5rem', offset: .5 }),
-					style({ opacity: 1, width: '8.5rem', offset: 1 })
-				]))
-			]),
-			transition('hidden => visible', [
-				animate(1000, keyframes([
-					style({ visibility: 'visible', opacity: 0 }),
-					style({ visibility: 'visible', opacity: 5 })
-				]))
-			])
-		]),
-	],
 	selector: 'app-display',
 	templateUrl: './display.component.html',
 	styleUrls: ['./display.component.css']
 })
 export class DisplayComponent implements OnDestroy {
-	private name: string;
-	private nodeRows: NodeRow[] = [];
-	private subscription: Subscription;
+	name: string;																			// Name of the actor whose path is being displayed
+	nodeRows: NodeRow[] = [];
+	rowAddedEmitter = new EventEmitter<number>();			// Supplied to our AutoScrollDirective to trigger a scroll event
+	scrollLock = true;																// Whether user scroll is currently disabled
+	subscription: Subscription;
+	width: DeviceWidth;
+
 
 	constructor(
-		private appState: StateService,
-		private dispatch: DispatchService
+		private dispatch: DispatchService,
+		appState: StateService
 	) {
+		if (window.innerWidth < 800) {
+			this.width = DeviceWidth.small;
+		} else {
+			this.width = DeviceWidth.medium;
+		}
+
 		this.subscription = appState
 			.getCurrBaconPath()
-			.first()
-			.subscribe(path => {
+			.subscribe((path: BaconPath): void => {
 				if (!path) {
 					return;
 				}
 
-				const nodeTypes = getNodeTypes(path.length * 2 - 1);
 				this.name = path[0].actor.name;
+				this.nodeRows = [];
+				this.scrollLock = true;
 
-				const flattened = path.reduce((flat, { actor, movie }, i) => {
-					const actorRow = getRowIndex(2 * i);
-					const actorNode = new ActorNode(actor, actorRow);
+				const numNodes = path.length * 2 - 1;
+				const nodeTypes = getNodeTypes(numNodes, this.width);
 
-					flat.push(actorNode);
-					this.nodeRows[actorRow] = this.nodeRows[actorRow] || new NodeRow(actorRow);
-					this.nodeRows[actorRow].nodes.push(actorNode);
-
-					if (movie) {
-						const movieRow = getRowIndex(2 * i + 1);
-						const movieNode = new MovieNode(movie, nodeTypes[2 * i + 1], movieRow);
-
-						flat.push(movieNode);
-						this.nodeRows[movieRow] = this.nodeRows[movieRow] || new NodeRow(movieRow);
-						this.nodeRows[movieRow].nodes.push(movieNode);
-					}
-
-					return flat;
-				}, []);
-
-				// TODO: CLEAR THESE ON DESTROY
-				flattened.forEach((node, i) => {
-					const row = this.nodeRows[getRowIndex(i)];
-					setTimeout(() => {
-						row.visibility = 'visible';
-						node.show();
-					}, 1000 * i);
+				path.forEach((node: BaconPathNode, i: number): void => {
+					this.addActor(node.actor, 2 * i);
+					node.movie ? this.addMovie(node.movie, 2 * i + 1, nodeTypes) : null;
 				});
- 			});
+
+				// initializes the first node
+				setTimeout(() => this.showNode(0, 0), 0);
+			});
 	}
 
 
-	reset() {
+	// Returns the index of the row an actor/movie node is located in given the node's index
+	// in the overall collection of actor/movie nodes.
+	getRowIndex(nI: number): number {
+		const rI = ROW_LENGTHS[this.width];
+		return 2 * Math.floor(nI / (rI + 1)) + Math.floor((nI % (rI + 1)) / rI);
+	}
+
+
+	addActor(actor: Actor, index: number): void {
+		const actorRow = this.getRowIndex(index);
+
+		const actorNode = {
+			hidden: true,
+			rowIndex: actorRow,
+			type: NodeType.actor,
+			actor
+		};
+
+		this.nodeRows[actorRow] = this.nodeRows[actorRow] || new NodeRow(actorRow, this.width);
+		this.nodeRows[actorRow].nodes.push(actorNode);
+	}
+
+
+	addMovie(movie: Movie, index: number, nodeTypes: NodeType[]): void {
+		const movieRow = this.getRowIndex(index);
+
+		const movieNode = {
+			hidden: true,
+			rowIndex: movieRow,
+			type: nodeTypes[index],
+			movie
+		};
+
+		this.nodeRows[movieRow] = this.nodeRows[movieRow] || new NodeRow(movieRow, this.width);
+		this.nodeRows[movieRow].nodes.push(movieNode);
+	}
+
+
+	// Displays a node, and upon completion, sets up the next node to be displayed, or unlocks
+	// user input if finished.
+	showNode(rowIndex: number, nodeIndex: number): void {
+		const row = this.nodeRows[rowIndex];
+
+		row.show();
+		row.nodes[nodeIndex].hidden = false;
+		this.rowAddedEmitter.emit(rowIndex);
+
+		if (nodeIndex < row.nodes.length - 1) {
+			setTimeout(() => this.showNode(rowIndex, nodeIndex + 1), 1000);
+		} else if (rowIndex < this.nodeRows.length - 1) {
+			setTimeout(() => this.showNode(rowIndex + 1, 0), 1000);
+		} else {
+			this.scrollLock = false;
+			this.dispatch.enableInput();
+		}
+	}
+
+
+	reset(): void {
 		this.dispatch.setViewHome();
-		this.dispatch.enableInput();
-		this.dispatch.setCurrBaconPath(null);
 	}
 
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }

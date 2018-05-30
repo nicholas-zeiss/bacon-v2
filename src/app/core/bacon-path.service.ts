@@ -1,3 +1,10 @@
+/**
+ *
+ *	Service that handles manipulating the BaconPath models and manipulation. When a name is to be searched for, this service
+ *	is responsible for determining if the search has already been stored or if the server must be queried, handling server responses,
+ *	storing new data on a successful server response, and triggering the display of subsequent views.
+ *
+**/
 
 
 import { Injectable } from '@angular/core';
@@ -8,99 +15,100 @@ import { DispatchService } from './dispatch.service';
 import { ServerCallsService } from './server-calls.service';
 import { StateService } from './state.service';
 
-import { Actor, ChoiceStore, NconstStore } from '../shared/actor';
-import { BaconPath, BaconPathStore, isBaconPath } from '../shared/bacon-path';
-import { SearchError } from '../shared/search-error';
-import { deepEquals } from '../shared/utils';
+import { Actor, BaconPath, BaconPathNode, DataStore, SearchError } from '../shared/models';
+import { deepEquals, isBaconPath, plainString } from '../shared/utils';
 
 
 @Injectable()
 export class BaconPathService {
-	private storedActors: NconstStore;
-	private storedBaconPaths: BaconPathStore;
-	private storedChoices: ChoiceStore;
+	private pastData: DataStore;
+
 
 	constructor(
 		private dispatch: DispatchService,
 		private serverCalls: ServerCallsService,
-		private state: StateService
+		state: StateService
 	) {
 		state.getStores()
 			.distinctUntilChanged(deepEquals)
-			.subscribe(stores => Object.assign(this, stores));
+			.subscribe((stores: DataStore): void => {
+				this.pastData = stores;
+			});
 	}
 
 
-	searchName(name: string) {
-		const origName = name;
-		name = name.toLowerCase();
+	getStoredActorChoice(name: string): Actor[] {
+		name = plainString(name);
+		return this.pastData.storedActorChoices.get(name) || null;
+	}
 
-		if (this.storedActors.has(name)) {
-			if (this.storedActors.get(name).size === 1) {
-				const nconst = Array.from(this.storedActors.get(name))[0];
-				const path = this.storedBaconPaths.get(nconst);
+
+	searchName(origName: string): void {
+		const name = plainString(origName);
+		const pastNconsts = this.pastData.storedNconsts.get(name);
+
+		if (pastNconsts) {
+			if (pastNconsts.size === 1) {
+				const nconst = Array.from(pastNconsts)[0];
+				const path = this.pastData.storedBaconPaths.get(nconst);
 				this.displayBaconPath(path);
 			} else {
-				const actors = this.storedChoices.get(name);
+				const actors = this.pastData.storedActorChoices.get(name);
 				this.displayActorChoice(actors);
 			}
-
-			return;
-		}
-
-		this.dispatch.setSearchName(origName);
-		this.dispatch.setViewLoading();
-		this.serverCalls
-			.searchName(name)
-			.subscribe(this.handleSuccess, this.handleError);
-	}
-
-
-	searchNconst(nconst: number) {
-		if (this.storedBaconPaths.has(nconst)) {
-			const path = this.storedBaconPaths.get(nconst);
-			this.displayBaconPath(path);
-			return;
-		}
-
-		this.dispatch.setSearchName(`index: ${nconst}`);
-		this.dispatch.setViewLoading();
-		this.serverCalls
-			.searchNconst(nconst)
-			.subscribe(this.handleSuccess, this.handleError);
-	}
-
-
-	handleSuccess = (res: Actor[] | BaconPath) => {
-		if (isBaconPath(res)) {
-			res.forEach(({ actor, movie }) => (
-				actor.imgUrl = actor.imgUrl || '/assets/no-image.png'
-			));
-			this.dispatch.addBaconPathToStore(res);
-			this.displayBaconPath(res);
 		} else {
-			this.dispatch.addActorChoiceToStore(res);
+			this.serverCalls
+				.searchName(name)
+				.subscribe(this.handleSuccess, this.handleError);
+
+			this.dispatch.setViewLoading(origName);
+		}
+	}
+
+
+	searchNconst(nconst: number): void {
+		const storedPath = this.pastData.storedBaconPaths.get(nconst);
+
+		if (storedPath) {
+			this.displayBaconPath(storedPath);
+		} else {
+			this.serverCalls
+				.searchNconst(nconst)
+				.subscribe(this.handleSuccess, this.handleError);
+
+			this.dispatch.setViewLoading(`index: ${nconst}`);
+		}
+	}
+
+
+	handleSuccess = (res: Actor[] | BaconPath): void => {
+		if (isBaconPath(res)) {
+			res.forEach((node: BaconPathNode): void => {
+				node.actor.imgUrl = node.actor.imgUrl || '/assets/no-image.png';
+			});
+
+			this.displayBaconPath(res);
+
+		} else {
 			this.displayActorChoice(res);
 		}
+
+		this.dispatch.addDataToStore(res);
 	}
 
 
-	handleError = (err: SearchError) => {
-		this.dispatch.enableInput();
+	handleError = (err: SearchError): void => {
 		this.dispatch.setSearchError(err);
-		this.dispatch.setViewError();
 	}
 
 
-	displayActorChoice(choice: Actor[]) {
+	displayActorChoice(choice: Actor[]): void {
 		this.dispatch.setCurrActorChoice(choice);
-		this.dispatch.setViewChoice();
 	}
 
 
-	displayBaconPath(path: BaconPath) {
+	displayBaconPath(path: BaconPath): void {
 		this.dispatch.setCurrBaconPath(path);
-		this.dispatch.setViewDisplay();
 	}
 }
 

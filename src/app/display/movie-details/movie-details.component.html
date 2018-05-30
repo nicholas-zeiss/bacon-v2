@@ -1,21 +1,21 @@
 
 
-<div [ngClass]="node.classNames">
+<div style="box-sizing: border-box;" [@visibility]="getAnimationState()">
 	<svg
 		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
-		[attr.width]="node.arrowDetails.width"
-		[attr.height]="node.arrowDetails.height"
+		[attr.height]="arrowDetails.height"
+		[attr.width]="arrowDetails.width"
 	>
 
 		<line
 			stroke="#272727"
 			stroke-linecap="butt"
 			stroke-width="7"
-			[attr.x1]="node.arrowDetails.lineStart.x"
-			[attr.x2]="node.arrowDetails.lineEnd.x"
-			[attr.y1]="node.arrowDetails.lineStart.y"
-			[attr.y2]="node.arrowDetails.lineEnd.y"
+			[attr.x1]="arrowDetails.lineStart.x"
+			[attr.x2]="arrowDetails.lineEnd.x"
+			[attr.y1]="arrowDetails.lineStart.y"
+			[attr.y2]="arrowDetails.lineEnd.y"
 		/>
 
 		<polyline
@@ -23,27 +23,35 @@
 			stroke="#272727"
 			stroke-linejoin="miter"
 			stroke-width="7"
-			[attr.points]="node.arrowDetails.tipPoints"
+			[attr.points]="arrowDetails.tipPoints"
 		/>
 
 		<text
 			style="fill: #272727; font-size: 12px;"
-			[attr.text-anchor]="node.arrowDetails.year.anchor"
-			[attr.x]="node.arrowDetails.year.x"
-			[attr.y]="node.arrowDetails.year.y"
+			[attr.text-anchor]="arrowDetails.year.anchor"
+			[attr.x]="arrowDetails.year.x"
+			[attr.y]="arrowDetails.year.y"
 		>
-			{{ node.movie.year !== '0' ? node.movie.year : '' }}
+			{{ node.movie.year !== 0 ? node.movie.year : '' }}
 		</text>
 
 		<foreignObject
-			[attr.height]="node.arrowDetails.title.height"
-			[attr.width]="node.arrowDetails.title.width"
-			[attr.x]="node.arrowDetails.title.x"
-			[attr.y]="node.arrowDetails.title.y"
+			[attr.height]="arrowDetails.title.height"
+			[attr.width]="arrowDetails.title.width"
+			[attr.x]="arrowDetails.title.x"
+			[attr.y]="arrowDetails.title.y"
 		>
 			<xhtml:p
-				[ngStyle]="{'width': '100%', 'height': '100%', 'margin.px': 0, 'font-size.px': 12, 'text-align': node.arrowDetails.title.align, 'overflow-wrap': 'break-word', 'color': '#272727'}"
 				xmlns="http://www.w3.org/1999/xhtml"
+				[ngStyle]="{
+					'color': '#272727',
+					'font-size.px': 12,
+					'height': '100%',
+					'margin.px': 0,
+					'overflow-wrap': 'break-word',
+					'text-align': arrowDetails.title.align,
+					'width': '100%'
+				}"
 			>
 				{{ node.movie.title }}
 			</xhtml:p>

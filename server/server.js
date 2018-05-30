@@ -16,12 +16,11 @@ const app = express();
 
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../../app')));
 
 
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../src/index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, '../dist')));
+}
 
 
 // Helper for /name and /nconst post requests
@@ -75,18 +74,16 @@ app.post('/api/name', (req, res) => {
 
 	db.getActorsByName(req.body.name)
 		.then((actors) => {
-			setTimeout(() => {
-				if (!actors.length) {
-					res.sendStatus(404);
-				} else if (actors.length === 1) {
-					sendBaconPath(actors[0], res);
-				} else {
-					res.status(300).json(actors.map((actor) => {
-						delete actor.parents;
-						return actor;
-					}));
-				}
-			}, 1000);
+			if (!actors.length) {
+				res.sendStatus(404);
+			} else if (actors.length === 1) {
+				sendBaconPath(actors[0], res);
+			} else {
+				res.status(300).json(actors.map((actor) => {
+					delete actor.parents;
+					return actor;
+				}));
+			}
 		})
 		.catch(() => res.sendStatus(500));
 });
@@ -102,19 +99,17 @@ app.post('/api/nconst', (req, res) => {
 
 	db.getActorsByNconsts([req.body.nconst])
 		.then((actors) => {
-			setTimeout(() => {
-				if (!actors.length) {
-					res.sendStatus(404);
-				} else {
-					sendBaconPath(actors[0], res);
-				}
-			}, 1000);
+			if (!actors.length) {
+				res.sendStatus(404);
+			} else {
+				sendBaconPath(actors[0], res);
+			}
 		})
 		.catch(() => res.sendStatus(500));
 });
 
 
-const port = process.argv[2] ? Number(process.argv[2]) : 8080;
+const port = process.env.PORT ? Number(process.env.PORT) : 8080;
 
 app.listen(port, () => console.log('bacon is listening to port ', port));
 

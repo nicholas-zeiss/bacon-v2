@@ -1,3 +1,8 @@
+/**
+ *
+ *	Displays a search error and a reset button.
+ *
+**/
 
 
 import { Component, OnDestroy } from '@angular/core';
@@ -6,7 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { SearchError } from '../shared/search-error';
+import { SearchError } from '../shared/models';
 
 
 @Component({
@@ -15,8 +20,10 @@ import { SearchError } from '../shared/search-error';
 	styleUrls: ['./error.component.css']
 })
 export class ErrorComponent implements OnDestroy {
-	private error: SearchError;
+	error: SearchError;
+
 	private subscription: Subscription;
+
 
 	constructor(
 		private dispatch: DispatchService,
@@ -24,17 +31,18 @@ export class ErrorComponent implements OnDestroy {
 	) {
 		this.subscription = state
 			.getSearchError()
-			.subscribe(err => this.error = err);
+			.subscribe((err: SearchError): void => {
+				this.error = err;
+			});
 	}
 
 
-	reset() {
-		this.dispatch.setSearchError(null);
+	reset(): void {
 		this.dispatch.setViewHome();
 	}
 
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }

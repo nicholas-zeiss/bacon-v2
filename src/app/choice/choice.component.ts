@@ -1,3 +1,9 @@
+/**
+ *
+ *	When a user searches a name that has multiple results, this component displays them and allows the
+ *	user to select the actor they desire.
+ *
+**/
 
 
 import { Component, OnDestroy } from '@angular/core';
@@ -7,7 +13,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { BaconPathService } from '../core/bacon-path.service';
 import { DispatchService } from '../core/dispatch.service';
 import { StateService } from '../core/state.service';
-import { Actor } from '../shared/actor';
+
+import { Actor } from '../shared/models';
 
 
 @Component({
@@ -17,33 +24,34 @@ import { Actor } from '../shared/actor';
 })
 export class ChoiceComponent implements OnDestroy {
 	choice: Actor[];
-	subscription: Subscription;
+
+	private subscription: Subscription;
+
 
 	constructor(
 		private baconPath: BaconPathService,
 		private dispatch: DispatchService,
-		private state: StateService
+		state: StateService
 	) {
 		this.subscription = state
 			.getCurrActorChoice()
-			.subscribe((choice: Actor[]) => this.choice = choice);
+			.subscribe((choice: Actor[]): void => {
+				this.choice = choice;
+			});
 	}
 
 
-	reset() {
-		this.dispatch.enableInput();
-		this.dispatch.setCurrActorChoice(null);
+	reset(): void {
 		this.dispatch.setViewHome();
 	}
 
 
-	chooseActor(actor: Actor) {
-		this.dispatch.setCurrActorChoice(null);
+	chooseActor(actor: Actor): void {
 		this.baconPath.searchNconst(actor._id);
 	}
 
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }

@@ -1,6 +1,11 @@
+/**
+ *
+ *	This module exports a function returning the data necessary to render our movie arrow svg elements, dependent on the arrow type.
+ *
+**/
 
 
-import { NodeTypes } from '../layout-details';
+import { NodeType } from '../layout-details';
 
 
 interface Point {
@@ -28,7 +33,7 @@ export interface ArrowDetails {
 }
 
 
-export function getArrowDetails(type: NodeTypes): ArrowDetails {
+export function getArrowDetails(type: NodeType): ArrowDetails {
 	const out = {} as ArrowDetails;
 
 	switch (type) {
@@ -169,14 +174,13 @@ export function getArrowDetails(type: NodeTypes): ArrowDetails {
 	}
 
 
-
 	const width = out.lineEnd.x - out.lineStart.x;
 	const height = out.lineStart.y - out.lineEnd.y;
 	const theta = Math.atan(height / width);
 	const sign = width >= 0 ? 1 : -1;
 
 
-	// uses some trig to calc the coordinates of points in the arrow tip depending
+	// Uses some trig to calc the coordinates of points in the arrow tip depending
 	// on the direction of the arrow
 	return Object.assign(out, {
 		tipPoints: [

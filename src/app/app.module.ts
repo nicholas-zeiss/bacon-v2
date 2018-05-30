@@ -1,9 +1,12 @@
+/**
+ *
+ *	Root module of the app. Bundles it all together.
+ *
+**/
 
-
-import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { ChoiceComponent } from './choice/choice.component';

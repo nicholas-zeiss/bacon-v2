@@ -34,21 +34,3 @@ body {
 	width: 100%;
 }
 
-
-@media (max-width: 440px) {
-	header {
-		height: 8.125rem;
-	} .view {
-		height: calc(100vh - 11.625rem);
-	}
-}
-
-
-@media (min-width: 441px) and (max-width: 750px) {
-	header {
-		height: 5.75rem
-	} .view {
-		height: calc(100vh - 9.25rem);
-	}
-}
-

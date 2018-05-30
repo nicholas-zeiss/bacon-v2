@@ -1,6 +1,6 @@
 
 
-<h1>Which of these actors did you mean?</h1>
+<h1 id="choice-header">Which of these actors did you mean?</h1>
 <div *ngFor="let actor of choice" class="actor-choice" (click)="chooseActor(actor)">
 	<div>
 		<h1>{{ actor.name }}</h1>

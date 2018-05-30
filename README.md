@@ -4,7 +4,7 @@ A web app that will show you the smallest possible link from an actor to Kevin B
 
 ## Implementation
 
-Stack: MongoDB, Express, AngularJS, Node.js, AWS
+Stack: MongoDB, Express, Angular, Node.js, AWS
 
 Using the IMDb dataset (acquired via AWS), a tree is created where Kevin Bacon is the root and each of his children are actors that starred in a movie with him. Their children are all the actors they starred in movies with (excluding actors already included), and this pattern continues until a depth of 6 is reached. Using the latest IMDb dataset available on 2/6/2018, this tree will contain 471,607 unique actors linked by 205,606 unique movies.
 
@@ -56,5 +56,5 @@ Your database will now be ready to go! To start running the app use:
 $ npm start
 ```
 
-The app will now be running on your localhost on port 8080.
+The app will now be running on your localhost on port 4200 (the default used by Angular).
 

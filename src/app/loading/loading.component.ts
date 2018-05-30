@@ -1,3 +1,8 @@
+/**
+ *
+ *	Displays a spinner and loading message while the app waits for a server response to a search
+ *
+**/
 
 
 import { Component, OnDestroy } from '@angular/core';
@@ -13,8 +18,10 @@ import { StateService } from '../core/state.service';
 	styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent implements OnDestroy {
-	private name: string;
+	name: string;
+
 	private subscription: Subscription;
+
 
 	constructor(state: StateService) {
 		this.subscription = state
@@ -22,7 +29,8 @@ export class LoadingComponent implements OnDestroy {
 			.subscribe(name => this.name = name);
 	}
 
-	ngOnDestroy() {
+
+	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
 	}
 }

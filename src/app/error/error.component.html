@@ -2,7 +2,7 @@
 
 <h2>{{ error.message }}</h2>
 <p *ngIf="error.url">
-	If this does not seem correct, please make sure you are using the same spelling as <a href="error.url" target="_blank">IMDb</a>.
+	If this does not seem correct, please make sure you are using the same spelling as <a [href]="error.url" target="_blank">IMDb</a>.
 </p>
 <button (click)="reset()">New Search</button>
 
